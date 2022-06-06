@@ -15,15 +15,16 @@ li.tag-list__item {
 }
 
 .tag-list__link {
-  font-size: 12px;
-  line-height: 13px;
-  padding: 10px 0px;
+
   color: #000000;
   text-decoration: none;
   background-color: #E8E8E8;
-  border-radius: 10px;
   font-weight: 500;
-  width: 97px;
+  width: 81px;
+  border-radius: 6px;
+  font-size: 10px;
+  line-height: 13px;
+  padding: 8px 0px;
 }
 
 a.tag-list__link:hover {
@@ -31,7 +32,7 @@ a.tag-list__link:hover {
 }
 
 ul.tag-list--technology {
-  max-width: 200px;
+  width: 200px;
   justify-content: flex-start;
 }
 
@@ -39,7 +40,7 @@ li.tag-list__item--technology {
   display: flex;
   list-style-type: none;
   padding: 0;
-  margin: 5px 5px;
+  margin: 7px 5px;
 }
 
 .tag-list__link--technology {
@@ -52,13 +53,23 @@ li.tag-list__item--technology {
   justify-content: center;
 }
 
-@media screen and (min-width: 333px) {
-
+@media screen and (min-width: 350px) {
   ul.tag-list--technology {
-    max-width: 100%;
+    width: 100%;
+    justify-content: center;
   }
 
   li.tag-list__item {
     margin: 10px 5px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .tag-list__link {
+    border-radius: 10px;
+    width: 97px;
+    font-size: 12px;
+    line-height: 13px;
+    padding: 10px 0px;
   }
 }

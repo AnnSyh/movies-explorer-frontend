@@ -4,14 +4,23 @@ import ProfileImgSrc from "../../images/icon-main.svg";
 
 function NavBar(props) {
 
+  console.log('NavBar: props = ', props);
+  console.log('NavBar: props.loggedIn = ', props.loggedIn);
+
+  // if (!props.loggedIn) {
+  //   props.isBurgerOpened = true;
+  // }
+
 
   return (
-      <ul className={`header__nav ${props.isBurgerOpened ? 'header__nav_visible' : ''}`}>
-        
-        {/* { props.loggedIn  ? <p>залогинены</p> : <p>не залогинены </p>} */}
+    <>
+      {/*  <ul className={`${props.isBurgerOpened ? 'header__nav header__nav_visible' : 'header__nav '}`}> */}
 
-        {props.loggedIn ? (
-          <>
+      {/* { props.loggedIn  ? <p>залогинены</p> : <p>не залогинены </p>} */}
+
+      {props.loggedIn ? (
+        <>
+          <ul className={`${props.isBurgerOpened ? 'header__nav header__nav_visible' : 'header__nav '}`}>
             <li className='header__only-mobile-link'>
               <NavLink to="/movies" activeClassName="header__linklogged-active" className="header__linklogged">Главная</NavLink>
             </li>
@@ -23,24 +32,29 @@ function NavBar(props) {
             </li>
             <li className='pofile'>
               <NavLink to="/profile" activeClassName="header__linklogged-active" className="header__linklogged">
-                Аккаунт 
+                Аккаунт
                 <span className="header__profile-icon" >
-                  <img className="header__profile-img"  src={ProfileImgSrc} alt="профайл" />
+                  <img className="header__profile-img" src={ProfileImgSrc} alt="профайл" />
                 </span>
               </NavLink>
             </li>
+          </ul>
           </>
-        ) : (
-          <>
-          <li>
-              <NavLink to="/signup" className="header__link">Регистрация</NavLink>
-          </li>
-          <li>
-              <NavLink to="/signin" className="header__link header__link-active">Войти</NavLink>
-          </li>
-          </>
-        )}
+  ) : (
+    <>
+      <ul className='header__nav-no-logined'>
+        <li>
+          <NavLink to="/signup" className="header__link">Регистрация</NavLink>
+        </li>
+        <li>
+          <NavLink to="/signin" className="header__link header__link-active">Войти</NavLink>
+        </li>
       </ul>
+    </>
+  )
+}
+{/*  </ul> */ }
+      </>
   );
 }
 

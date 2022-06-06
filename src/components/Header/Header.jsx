@@ -23,16 +23,17 @@ function Header(props) {
 
   return (
     <header className="header">
-      <div className="container header__container">
+      {/* <div className="container header__container"> */}
+      <div className="header__container">
 
         <div className="header__mobile">
 
-          <Link to="/">
+          <Link to="/" className='header__mobile-logo-link'>
             <img className="logo header__container__logo" src={logoSrc} alt="логотип" />
           </Link>
 
-          <div 
-            className={`hamburger ${isBurgerOpened ? 'open' : 'closed'}`}
+          <div className={ `hamburger ${isBurgerOpened ? 'open' : 'closed'}
+                            ${props.isLoggedIn ? 'LoggedIn' : 'noLoggedIn'} `}  
             onClick={handleBurgerIconClick}
           >
             <img className="hamburger__img" src={` ${ isBurgerOpened ? burgerMenuCloseSrc : burgerMenuSrc } `} alt="бургер" />
@@ -42,10 +43,10 @@ function Header(props) {
         <div className={isBurgerOpened
                     ? "header__overlay-visible"
                     : "header__overlay-unvisible"}></div>
-        <Navbar 
-        loggedIn={props.isLoggedIn}
-        isBurgerOpened={isBurgerOpened}
-      />
+          <Navbar 
+            loggedIn={props.isLoggedIn}
+            isBurgerOpened={isBurgerOpened}
+          />
         
       </div>
     </header>

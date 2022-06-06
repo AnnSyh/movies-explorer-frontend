@@ -6,10 +6,10 @@ import '../TagList/tag-list.css';
 
 function Technology() {
   return (
-    <section className="technology section">
+    <section className="technology section section_technology">
       <div className="section__header">
         {/* <a name="technology"></a> */}
-        <Link name="technology" to="/"></Link>
+        {/* <Link name="technology" to="/"></Link> */}
         <h2 className="section__title">Технологии</h2>
       </div>
       <div className="technology__wrapper">

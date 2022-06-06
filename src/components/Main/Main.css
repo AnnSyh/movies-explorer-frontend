@@ -1,31 +1,19 @@
-
 /* ---------------------page------------------------ */
 .page {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: 1rem;
   min-width: 300px;
-  
-  /* max-width: 880px;
-  background-color: #000000;
-  color: #fff;
-  box-sizing: border-box;
-  margin: 0 auto;
-  min-width: 320px; */
 }
-
-
-
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .nowrap {
   white-space: nowrap;
 }
-
-
 
 /* -----------------section------------------------ */
 .section {
@@ -36,7 +24,7 @@
 
 .section__header {
   border-bottom: 1px solid #000000;
-  padding-bottom: 23px;
+  padding-bottom: 25px;
 }
 
 .section__title {
@@ -50,12 +38,69 @@
   margin: 0;
 }
 
+.section_about,
+.section_technology {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.section_student {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
 
 @media screen and (min-width: 480px) {
+
+  .section__header {
+    padding-bottom: 23px;
+  }
 
   .section__title {
     font-size: 22px;
     line-height: 27px;
   }
 
+  .section_about,
+  .section_technology,
+  .section_student {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  .section_about {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .section_technology {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .section_student {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .section_about {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .section_technology {
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+
+  .section_student {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 }

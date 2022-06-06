@@ -4,9 +4,9 @@ import studentSrc from "../../images/student.png";
 
 function Student() {
   return (
-    <section className="student section">
+    <section className="student section section_student">
       <div className="section__header">
-        <a name="student"></a>
+        {/* <a name="student" href="#"></a> */}
         {/* <Link name="student"></Link> */}
         <h2 className="section__title">Студент</h2>
       </div>

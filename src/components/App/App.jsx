@@ -45,6 +45,8 @@ function App() {
       <Route path="/" exact>
         <Header
         // loggedIn={loggedIn}
+        isLoggedIn={false} 
+        // isLoggedIn={true} 
         />
         <Main />
         <Footer />
