@@ -1,0 +1,61 @@
+
+/* ---------------------page------------------------ */
+.page {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  min-width: 300px;
+  
+  /* max-width: 880px;
+  background-color: #000000;
+  color: #fff;
+  box-sizing: border-box;
+  margin: 0 auto;
+  min-width: 320px; */
+}
+
+
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+
+
+/* -----------------section------------------------ */
+.section {
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.section__header {
+  border-bottom: 1px solid #000000;
+  padding-bottom: 23px;
+}
+
+.section__title {
+  font-style: normal;
+  font-weight: 400;
+
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  margin: 0;
+}
+
+
+@media screen and (min-width: 480px) {
+
+  .section__title {
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+}

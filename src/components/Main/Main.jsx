@@ -1,22 +1,20 @@
 import React from 'react';
-import Button from './Button';
-import Card from './Card';
-import CurrentUserContext from '../contexts/CurrentUserContext';
 
-function Main(props) {
+import Promo from '../Promo/Promo';
+import AboutProject from '../AboutProject/AboutProject';
+import Technology from '../Technology/Technology';
+import Student from '../Student/Student';
 
-    // Подписываемся на контекст CurrentUserContext
-    const currentUser = React.useContext(CurrentUserContext);
 
+function Main() {
     return (
         <>
-            <section className="profile section content__section">
-                Main section
-                <Button title=""
-                                btnClass="btn"
-                                handleClick={props.handleEditProfileClick} />
-            </section>
-
+            <main className="content container">
+                <Promo />
+                <AboutProject />
+                <Technology />
+                <Student />
+            </main>
         </>
     );
 }
