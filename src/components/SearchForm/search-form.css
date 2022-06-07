@@ -14,7 +14,7 @@
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
-  line-height: 20 px;
+  line-height: 20px;
   color: #A0A0A0;
   border: none;
 
@@ -106,7 +106,8 @@
   height: 0;
 }
 
-.checkbox__slider {
+.checkbox__slider,
+.checkbox__slider_green {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -119,9 +120,10 @@
   border-radius: 16px;
 }
 
-.checkbox__slider:before {
+.checkbox__slider:before,
+.checkbox__slider_green:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 16px;
   width: 16px;
   left: 2px;
@@ -145,5 +147,13 @@
 
 .checkbox__input:checked + .checkbox__slider:before {
   transform: translateX(16px);
+  background-color: #2BE080;
+}
+
+.checkbox_img {
+  width: 20px;
+  height: 20px;
+}
+.checkbox__slider_green:before {
   background-color: #2BE080;
 }

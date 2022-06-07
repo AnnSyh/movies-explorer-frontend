@@ -73,6 +73,7 @@
   line-height: 16px;
 }
 
+.auth__error,
 .auth__input-error {
   color: #EE3465;
   font-weight: 400;
@@ -91,6 +92,9 @@
   text-align: center;
   border: none;
   width: 100%;
+}
+.auth__input:focus, .auth__input:hover {
+  outline: 2px solid #FF6838;
 }
 
 .auth__text {

@@ -47,12 +47,13 @@
 .cards__title {
   font-size: 13px;
   line-height: 16px;
-  font-weight: 500;
   color: #000;
   margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.2px;
 }
 .cards__text {
-  padding: 9px 12px 14px 12px;
+  padding: 11px 12px 10px 12px;
   display: flex;
   flex-direction: column;
 }
@@ -60,11 +61,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 7px;
 }
 
 .cards__check {
   width: 32px;
   height: 32px;
+}
+
+.cards__trash {
+  width: 16px;
+  height: 16px;
+}
+.cards__trash {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-image: url(../../images/Cros.svg);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+  background-color: transparent;
+  border: none;
 }
 
 .cards__time {
@@ -76,6 +94,7 @@
 
 .btn__else {
   /* width: 320px; */
+  cursor: pointer;
   width: 240px;
   margin: 79px auto 99px auto;
   display: block;
@@ -88,7 +107,19 @@
   font-weight: 500;
 }
 
+.text-overflow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 210px;
+}
+
 @media screen and (min-width:480px) {
+
+  .text-overflow {
+    max-width: 210px;
+  }
+
   .btn__else {
     width: 320px;
   }

@@ -63,6 +63,10 @@
   border: none;
 }
 
+.profile__input:focus, .profile__input:hover {
+  outline: 2px solid #FF6838;
+}
+
 .profile__input-title {
   width: 50px;
   margin: 0;
@@ -119,6 +123,13 @@
 }
 
 @media screen and (min-width: 456px) {
+
+  .profile__wrapper {
+      width: 100%;
+      height: calc(100vh - 140px);
+      padding-top: 70px;
+      padding-bottom: 70px;
+  }
 
   .profile {
     padding: 0;

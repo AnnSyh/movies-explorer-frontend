@@ -9,7 +9,7 @@ import Student from '../Student/Student';
 function Main() {
     return (
         <>
-            <main className="content container">
+            <main className='content container'>
                 <Promo />
                 <AboutProject />
                 <Technology />
