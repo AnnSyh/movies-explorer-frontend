@@ -32,7 +32,7 @@ function Profile() {
 
   return (
     <>
-       <div class="auth profile__wrapper">
+       <div className="auth profile__wrapper">
             <main className='profile'>
                 <h1 className='profile__title'>Привет, Виталий!</h1>
                 <form 

@@ -11,6 +11,12 @@ function NavBar(props) {
   //   props.isBurgerOpened = true;
   // }
 
+  //убираем .header__overlay-visible при переходе на гл стр 
+  function mainLinkClick() {
+    const overlay = document.querySelector('.header__overlay-visible');
+    overlay.classList.remove('header__overlay-visible')
+  }
+
 
   return (
     <>
@@ -20,17 +26,25 @@ function NavBar(props) {
         <>
           <ul className={`${props.isBurgerOpened ? 'header__nav header__nav_visible' : 'header__nav '}`}>
             <li className='header__only-mobile-link'>
-              <NavLink to='/movies' activeClassName='header__linklogged-active' className='header__linklogged'>Главная</NavLink>
+              <NavLink to='/'
+                       onClick={mainLinkClick} 
+                       className='header__linklogged'><span className="header__linklogged-text">Главная</span></NavLink>
             </li>
             <li>
-              <NavLink to='/movies' activeClassName='header__linklogged-active' className='header__linklogged'>Фильмы</NavLink>
+              <NavLink to='/movies' 
+                       activeClassName='header__linklogged-active' 
+                       className='header__linklogged'><span className="header__linklogged-text">Фильмы</span></NavLink>
             </li>
             <li>
-              <NavLink to='/saved-movies' activeClassName='header__linklogged-active' className='header__linklogged'>Сохранённые фильмы</NavLink>
+              <NavLink to='/saved-movies' 
+                       activeClassName='header__linklogged-active' 
+                       className='header__linklogged'><span className="header__linklogged-text">Сохранённые фильмы</span></NavLink>
             </li>
             <li className='header__pofile'>
-              <NavLink to='/profile' activeClassName='header__linklogged-active' className='header__linklogged'>
-                Аккаунт
+              <NavLink to='/profile' 
+                       activeClassName='header__linklogged-active' 
+                       className='header__linklogged'>
+                <span className="header__linklogged-text">Аккаунт</span>
                 <span className='header__profile-icon' >
                   <img className='header__profile-img' src={ProfileImgSrc} alt='профайл' />
                 </span>
