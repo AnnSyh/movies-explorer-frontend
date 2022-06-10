@@ -8,6 +8,7 @@ function SearchForm() {
       <div className='search'>
         <form className='search__form' noValidate=''>
           <input className='search__input'
+            required
             placeholder='Фильм'
             type='text'
             defaultValue=''

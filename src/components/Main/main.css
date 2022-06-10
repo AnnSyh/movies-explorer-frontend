@@ -69,6 +69,10 @@
     padding-right: 30px;
   }
 
+  .section_technology {
+    padding-top: 28px;
+  }
+
 }
 
 @media screen and (min-width: 768px) {
@@ -86,6 +90,7 @@
     padding-left: 40px;
     padding-right: 40px;
   }
+
 }
 
 @media screen and (min-width: 1200px) {

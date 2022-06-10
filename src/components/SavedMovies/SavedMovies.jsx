@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '../Button/Button';
 import Card from '../Card/Card';
 import SearchForm from '../SearchForm/SearchForm';
 // import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -71,11 +70,6 @@ function SavedMovies(props) {
                                 );
                             })}
                         </ul>
-
-                        <button
-                            className='btn__else'
-                        // onClick={handleCardElse}
-                        >Еще</button>
 
                     </div>
                 </section>

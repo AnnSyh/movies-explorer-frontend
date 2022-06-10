@@ -7,7 +7,6 @@
   margin: auto;
   padding: 30px;
   width: calc(100% - 60px);
-  min-width: 260px;
 }
 
 .auth__header,
@@ -22,6 +21,7 @@
 }
 
 .auth__title {
+  text-align: center;
   margin: 40px 0;
   font-weight: 500;
   font-size: 24px;
@@ -121,6 +121,9 @@
 }
 
 @media screen and (min-width: 456px) {
+  .auth__title {
+    text-align: left;
+  }
 
   .auth__content {
     height: calc(100% - 167px);
