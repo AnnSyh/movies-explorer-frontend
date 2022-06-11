@@ -1,15 +1,33 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../Auth/Auth';
 
 
 function Register({ handleRegister }) {
 
-    function handleSubmit(e) {
+    const [registerData, setRegisterData] = useState({ 
+        // name: '',
+        password: '',
+        email: '',
+      });
+    
+      const [message, setMessage] = useState('');
+      const { email, password } = registerData;
+    
+      function handleChange(e) {
+        const { name, value } = e.target;
+        setRegisterData({
+          ...registerData, 
+          [name]: value 
+        });
+      }
+      function handleSubmit(e) {
         e.preventDefault();
         console.log('!!! handleSubmit');
-        handleRegister()
-    }
+        handleRegister(email,password)
+          // .catch((e) => setMessage(e.message))
+      }
 
   return (
       <Auth title={'Добро пожаловать!'} 
@@ -43,6 +61,9 @@ function Register({ handleRegister }) {
                   name='email'
                   autoComplete='on'
                   placeholder='E-mail'
+
+                  value={email || ""}
+                  onChange={handleChange}
               />
               <span className='auth__input-error'/>
           </label>
@@ -57,6 +78,10 @@ function Register({ handleRegister }) {
                   name='password'
                   autoComplete='on'
                   placeholder='Пароль'
+
+                  value={password || ""}
+                  onChange={handleChange}
+
               />
               <span className='auth__input-error'>Что-то пошло не так...</span>
           </label>

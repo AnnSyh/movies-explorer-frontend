@@ -1,21 +1,38 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../Auth/Auth';
 
-function Login ({ handleLogin }) {
+function Login({ handleLogin }) {
+    const [userData, setUserState] = useState({
+        password: '',
+        email: '',
+        // password: 'dsfsdfsdfsdf',
+        // email: 'bbb@email.ru',
+    });
 
+    const [message, setMessage] = useState('')
+    const { email, password } = userData
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setUserState({
+            ...userData,
+            [name]: value
+        });
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log('!!! handleSubmit');
-        handleLogin()
+        console.log('Login.jsx: handleSubmit');
+        handleLogin(email, password)
     }
 
     return (
         <>
-            {/* <p className="auth__error">
+            <p className="auth__error">
                {message}
-            </p> */}
+            </p>
 
             <Auth title={'Рады видеть!'}
                 ButtonText={'Войти'}
@@ -34,6 +51,8 @@ function Login ({ handleLogin }) {
                         name='email'
                         autoComplete='on'
                         placeholder='E-mail'
+                        value={email} 
+                        onChange={handleChange} 
                     />
                     <span className='auth__input-error' />
                 </label>
@@ -42,12 +61,14 @@ function Login ({ handleLogin }) {
                     <input
                         className='auth__input'
                         type='password'
-                        minLength='6'
+                        minLength='5'
                         maxLength='12'
                         required
                         name='password'
                         autoComplete='on'
                         placeholder='Пароль'
+                        value={password}
+                        onChange={handleChange} 
                     />
                     <span className='auth__input-error' />
                 </label>

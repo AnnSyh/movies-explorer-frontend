@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://mesto.backend.annsyh.nomoredomains.work';
 
 const handleResponse = response => {
 if (response.ok) { 
@@ -17,7 +17,7 @@ export const register = (email, password) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    body: JSON.stringify({ email, password})
   })
   .then(handleResponse);
 };
