@@ -24,7 +24,8 @@ export const register = (values) => {
 };
 
 //Функция авторизация пользователя
-export const authorize = (email, password) => {
+export const authorize = (values) => {
+  const {name, email, password} = values
 
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
@@ -32,7 +33,8 @@ export const authorize = (email, password) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    // body: JSON.stringify({email, password})
+    body: JSON.stringify(values)
   })
   .then(handleResponse);
 };

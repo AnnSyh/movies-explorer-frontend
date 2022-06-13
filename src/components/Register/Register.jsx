@@ -7,13 +7,10 @@ import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 function Register({ handleRegister }) {
 
-    // ----------------------------
-
     const [message, setMessage] = useState('');
-    const [btnDisabled, setBtnDisabled] = useState(true);
-
 
     // ----------------------------
+    const [btnDisabled, setBtnDisabled] = useState(true);
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()
 
     function handleSubmit(e) {
@@ -44,6 +41,7 @@ function Register({ handleRegister }) {
                     minLength='2'
                     maxLength='15'
                     placeholder='Имя'
+                    // pattern='[a-zA-Zа-яА-Я -]'
 
                     value={values.name || ""}
                     onChange={handleChangeInput}
