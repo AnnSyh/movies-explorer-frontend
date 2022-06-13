@@ -9,7 +9,8 @@ return Promise.reject(`Ошибка ${response.status}`);
 };
 
 //Функция регистрация пользователя
-export const register = (email, password) => {
+export const register = (values) => {
+  const {name, email, password} = values
 
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
@@ -17,7 +18,7 @@ export const register = (email, password) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, password})
+    body: JSON.stringify(values)
   })
   .then(handleResponse);
 };

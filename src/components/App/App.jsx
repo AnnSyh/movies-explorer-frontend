@@ -33,6 +33,7 @@ function App() {
     username: '',
     email: '',
   })
+  const [isSubmitting, setIsSubmitting] = useState(false); // обновление пользователя 
   const history = useHistory();
 
 
@@ -64,7 +65,7 @@ function App() {
 
     auth
       .authorize(username, password)
-      .then((data) => {        
+      .then((data) => {
         const userData = { username, password }
         localStorage.setItem('token', data.token);  // в localStorage записываем текущий token
         setUserData(userData)                       // устанавливаем данные юзера
@@ -77,11 +78,11 @@ function App() {
       })
   }
 
-  function handleRegister(email, password) {
+  function handleRegister( email, password) {
     console.log('handleRegister: ');
 
     auth
-      .register(email, password)
+      .register( email, password)
       .then((res) => {
         setisSuccessInfoTooltipOpen(true);
         history.push('/signin')
@@ -120,6 +121,26 @@ function App() {
     localStorage.removeItem('token');
     setLoggedIn(false);
     history.push('/signin');
+  }
+
+  // Функция обновления пользователя 
+  function handleUpdateUser(user) {
+    console.log('Функция обновления пользователя');
+    setIsSubmitting(true);
+    // buttonText = "Сохраняется...";
+    api
+      .postUser(user)
+      .then((userData) => {
+        setCurrentUser(userData);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err))
+      .finally(
+        () => {
+          setIsSubmitting(false);
+          // buttonText = "Сохранить";
+        }
+      );
   }
 
   // ----------useEffect------------------------------------------------------------------
@@ -207,8 +228,9 @@ function App() {
           <ProtectedRoute
             path='/profile'
             loggedIn={loggedIn}
-            signOut={signOut} 
+            signOut={signOut}
             userData={userData}
+            onUpdateUser={handleUpdateUser}
             component={Profile}
           >
           </ProtectedRoute>

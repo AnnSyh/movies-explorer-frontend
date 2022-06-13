@@ -2,91 +2,89 @@ import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../Auth/Auth';
+import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 
 function Register({ handleRegister }) {
 
-    const [registerData, setRegisterData] = useState({ 
-        // name: '',
-        password: '',
-        email: '',
-      });
-    
-      const [message, setMessage] = useState('');
-      const { email, password } = registerData;
-    
-      function handleChange(e) {
-        const { name, value } = e.target;
-        setRegisterData({
-          ...registerData, 
-          [name]: value 
-        });
-      }
-      function handleSubmit(e) {
-        e.preventDefault();
-        console.log('!!! handleSubmit');
-        handleRegister(email,password)
-          // .catch((e) => setMessage(e.message))
-      }
+    // ----------------------------
 
-  return (
-      <Auth title={'Добро пожаловать!'} 
+    const [message, setMessage] = useState('');
+    const [btnDisabled, setBtnDisabled] = useState(true);
+
+
+    // ----------------------------
+    const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        handleRegister(values)
+        //   .catch((e) => setMessage(e.message))
+    }
+    // ----------------------------
+
+    return (
+        <Auth title={'Добро пожаловать!'}
             ButtonText={'Зарегистрироваться'}
+            btnDisabled={!isValid}
             caption={<p className='auth__text'>Уже зарегистрированы?&nbsp;
-                        <Link className='auth__link' to='/signin'>Войти</Link>
-                    </p>}
+                <Link className='auth__link' to='/signin'>Войти</Link>
+            </p>}
             authFormStyle={'auth__form auth__form-register'}
             onSubmit={handleSubmit}
-      >
-          <label className='auth__label'>
-              <p className='auth__label-text'>Имя</p>
-              <input
-                  className='auth__input'
-                  type='text'
-                  required
-                  name='name'
-                  autoComplete='on'
-                  minLength='2'
-                  maxLength='15'
-                  placeholder='Имя'
-              />
-              <span className='auth__input-error' />
-          </label>
-          <label className='auth__label'>
-              <p className='auth__label-text'>E-mail</p>
-              <input
-                  className='auth__input'
-                  type='email'
-                  required
-                  name='email'
-                  autoComplete='on'
-                  placeholder='E-mail'
+        >
+            <label className='auth__label'>
+                <p className='auth__label-text'>Имя</p>
+                <input
+                    className='auth__input'
+                    type='text'
+                    required
+                    name='name'
+                    autoComplete='on'
+                    minLength='2'
+                    maxLength='15'
+                    placeholder='Имя'
 
-                  value={email || ""}
-                  onChange={handleChange}
-              />
-              <span className='auth__input-error'/>
-          </label>
-          <label className='auth__label'>
-              <p className='auth__label-text'>Пароль</p>
-              <input
-                  className='auth__input'
-                  type='password'
-                  minLength='2'
-                  maxLength='12'
-                  required
-                  name='password'
-                  autoComplete='on'
-                  placeholder='Пароль'
+                    value={values.name || ""}
+                    onChange={handleChangeInput}
+                />
+                <span className='auth__input-error'>{errors.name}</span>
+            </label>
+            <label className='auth__label'>
+                <p className='auth__label-text'>E-mail</p>
+                <input
+                    className='auth__input'
+                    type='email'
+                    required
+                    name='email'
+                    autoComplete='on'
+                    placeholder='E-mail'
 
-                  value={password || ""}
-                  onChange={handleChange}
+                    value={values.email || ""}
+                    onChange={handleChangeInput}
+                />
+                <span className='auth__input-error'>{errors.email}</span>
+            </label>
+            <label className='auth__label'>
+                <p className='auth__label-text'>Пароль</p>
+                <input
+                    className='auth__input'
+                    type='password'
+                    minLength='2'
+                    maxLength='12'
+                    required
+                    name='password'
+                    autoComplete='on'
+                    placeholder='Пароль'
 
-              />
-              <span className='auth__input-error'>Что-то пошло не так...</span>
-          </label>
-      </Auth>
-  )
+                    value={values.password || ""}
+                    onChange={handleChangeInput}
+
+                />
+                <span className='auth__input-error'>{errors.password}</span>
+            </label>
+        </Auth>
+    )
 }
 
 export default Register;

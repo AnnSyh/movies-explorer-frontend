@@ -63,9 +63,17 @@
   border: none;
 }
 
-.profile__input:focus, .profile__input:hover {
+.profile__input:focus, 
+.profile__input:hover {
   outline: 2px solid #FF6838;
 }
+
+.profile__form_disabled  .profile__input:focus, 
+.profile__form_disabled  .profile__input:hover {
+  outline: 2px solid transparent;
+}
+
+
 
 .profile__input-title {
   width: 50px;
@@ -106,6 +114,10 @@
   text-align: center;
   border: none;
   width: 100%;
+}
+
+.profile__btn-disabled {
+  background: #ffffff;
 }
 
 .profile__link {
