@@ -6,33 +6,15 @@ import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 
 function Login({ handleLogin }) {
-    // const [userData, setUserState] = useState({
-    //     password: '',
-    //     email: '',
-    //     // password: 'dsfsdfsdfsdf',
-    //     // email: 'bbb@email.ru',
-    // });
 
     const [message, setMessage] = useState('')
-    // const { email, password } = userData
-
-    // function handleChange(e) {
-    //     const { name, value } = e.target;
-    //     setUserState({
-    //         ...userData,
-    //         [name]: value
-    //     });
-    // }
 
     // ----------------------------
     const [btnDisabled, setBtnDisabled] = useState(true);
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()
 
-
     function handleSubmit(e) {
         e.preventDefault();
-        console.log('Login.jsx: handleSubmit');
-        // handleLogin(email, password)
         handleLogin(values)
     }
 

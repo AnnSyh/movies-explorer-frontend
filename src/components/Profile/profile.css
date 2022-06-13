@@ -105,7 +105,8 @@
 
 .profile__btn {
   color: #ffffff;
-  background: #FF6838;
+  /* background: #FF6838; */
+  background: #ccc;
   border-radius: 3px;
   height: 45px;
   font-weight: 500;
@@ -114,6 +115,9 @@
   text-align: center;
   border: none;
   width: 100%;
+}
+.profile__btn-valid {
+   background: #FF6838;
 }
 
 .profile__btn-disabled {

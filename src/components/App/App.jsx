@@ -15,7 +15,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие предупреждения
 
 import api from '../../utils/api';
-import moviesApi from "../../utils/MoviesApi";
+// import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -61,8 +61,7 @@ function App() {
 
 
   function handleLogin(username, password) {
-    console.log('handleLogin: ');
-
+    // console.log('handleLogin: ');
     auth
       .authorize(username, password)
       .then((data) => {
@@ -78,11 +77,10 @@ function App() {
       })
   }
 
-  function handleRegister( email, password) {
-    console.log('handleRegister: ');
-
+  function handleRegister(email, password) {
+    // console.log('handleRegister: ');
     auth
-      .register( email, password)
+      .register(email, password)
       .then((res) => {
         setisSuccessInfoTooltipOpen(true);
         history.push('/signin')
@@ -126,10 +124,11 @@ function App() {
   // Функция обновления пользователя 
   function handleUpdateUser(user) {
     console.log('Функция обновления пользователя');
+    const { name, email } = user
     setIsSubmitting(true);
     // buttonText = "Сохраняется...";
-    api
-      .postUser(user)
+    mainApi
+      .updateUserInfo(name, email)
       .then((userData) => {
         setCurrentUser(userData);
         closeAllPopups();

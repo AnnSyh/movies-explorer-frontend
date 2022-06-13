@@ -10,6 +10,7 @@ class Api {
           return Promise.reject(`Ошибка: ${res.status}`);
       }
   }
+  
 }
 
 export default Api;
