@@ -6,6 +6,8 @@ import imgCrossSrc from '../../images/icon-cross.svg';
 
 function Card(props) {
 
+    // console.log('Card: props = ', props);
+
     // function handleCardDelete() {
     //     props.handleCardDelete();
     // }
@@ -23,13 +25,13 @@ function Card(props) {
             <div className='cards__pic'>
                 <img className='cards__img'
                     data-popup='open-img__popup'
-                    src={props.link}
-                    alt={props.name}
+                    src={'https://api.nomoreparties.co' + props.image.formats.thumbnail.url}
+                    alt={props.nameRU}
                 />
             </div>
             <div className='cards__text'>
                 <div className='cards__tex-row'>
-                    <h2 className='cards__title text-overflow'>{props.name}</h2>
+                    <h2 className='cards__title text-overflow'>{props.nameRU}</h2>
 
                     {props.savedCard ? (
 
@@ -46,7 +48,7 @@ function Card(props) {
 
                 </div>
                 <div className='cards__tex-row'>
-                    <div className='cards__time'>1ч42м</div>
+                    <div className='cards__time'>{props.duration}</div>
                 </div>
             </div>
         </li>

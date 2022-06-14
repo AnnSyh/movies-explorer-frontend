@@ -1,42 +1,24 @@
 // import React from 'react';
 import React, { useCallback, useEffect } from "react";
-import { useParams, useHistory } from 'react-router-dom';
+import { useState } from 'react';
 import './profile.css';
 import '../Link/link.css';
-import { useState } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
-
     // console.log('props = ', props);
-
-    const history = useHistory();
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
-
     // console.log('currentUser = ', currentUser);
-
     const [isEditModeOn, setIsEditModeOn] = useState(false);
-
     // ----------------------------
-    const [btnDisabled, setBtnDisabled] = useState(true);
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
-
     //передаем введенный в поля текст
     useEffect(() => {
         if (currentUser) {
             resetForm(currentUser, {}, true)
         }
     }, [currentUser, resetForm]);
-
-    function handleSubmit(evt) {
-        evt.preventDefault(evt);
-        props.onUpdateUser(values);
-    };
-
-    // валидация полей формы
-    //     const re = /^[a-zA-Zа-яА-Я]+$/ui;
-    //     const re = /^[0-9a-zA-Z_\\-\\]+@[0-9a-zA-Z_\\-\\]+\.[a-zA-Z]+$/ui;
 
     const profileLinks = <>
         <button onClick={handleEditButton}
@@ -77,9 +59,7 @@ function Profile(props) {
         setIsEditModeOn(false);
 
         if(isValid){
-
             console.log('handleSubmitButtonClick: isValid = ', isValid);
-            
             props.onUpdateUser(values);  
         }
 
@@ -99,12 +79,11 @@ function Profile(props) {
                                 : 'profile__form profile__form_disabled'
                         }
                         onSubmit={handleSubmitButtonClick}
-                        // onSubmit={handleSubmit}
                         noValidate
                     >
                         <fieldset className='profile__fieldset'>
                             <label className='profile__label'>
-                                <p className='profile__input-title'>1Имя</p>
+                                <p className='profile__input-title'>Имя</p>
                                 <input
                                     className='profile__input'
                                     type='text'

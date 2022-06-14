@@ -13,9 +13,10 @@ import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие предупреждения
+import Preloader from '../Preloader/Preloader'; //крутилка
 
 import api from '../../utils/api';
-// import moviesApi from "../../utils/MoviesApi";
+import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -23,6 +24,7 @@ import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
 import * as auth from '../../utils/auth';
 
 function App() {
+
 
   const [isFailInfoTooltipOpen, setisFailInfoTooltipOpen] = useState(false) // открытие всплывающих попапов
   const [isSuccessInfoTooltipOpen, setisSuccessInfoTooltipOpen] = useState(false)
@@ -35,6 +37,8 @@ function App() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false); // обновление пользователя 
   const history = useHistory();
+
+  const [preloading, setPreloading] = useState(false); // крутилка
 
 
   const handleFailInfoTooltipOpen = () => {
@@ -118,7 +122,7 @@ function App() {
   function signOut() {
     localStorage.removeItem('token');
     setLoggedIn(false);
-    history.push('/signin');
+    history.push('/');
   }
 
   // Функция обновления пользователя 
@@ -143,6 +147,19 @@ function App() {
   }
 
   // ----------useEffect------------------------------------------------------------------
+  const [movies, setMovies] = useState([]);
+  //получаем массив фильмов
+  useEffect(() => {
+    console.log('useEffect');
+    moviesApi
+      .getAllMovies()
+      .then((movies) => {
+        console.log('moviesApi movies= ', movies);
+        setMovies(movies)
+      })
+      .catch((err) => console.log(err));
+
+  }, []);
 
   // кнопка Escape
   useEffect(() => {
@@ -178,6 +195,8 @@ function App() {
       });
   }, [loggedIn]);
 
+  //movies
+
 
   return (
     <>
@@ -191,26 +210,26 @@ function App() {
 
         <Switch>
 
-          <Route exact path='/signup'>
+          <Route path='/signup'>
             <Register handleRegister={handleRegister}
-            // handleFailInfoTooltipOpen={handleFailInfoTooltipOpen}
-            // handleSuccessInfoTooltipOpen={handleSuccessInfoTooltipOpen}
             />
           </Route>
 
-          <Route exact path='/signin'>
+          <Route path='/signin'>
             <Login handleLogin={handleLogin} />
           </Route>
 
-          <Route path='/' exact>
+          <Route exact path='/' >
             <Main />
             <Footer />
           </Route>
 
 
           <ProtectedRoute
-            exact path='/movies'
+            path='/movies'
             loggedIn={loggedIn}
+            preloading={preloading}
+
             component={Movies}
           >
             <Footer />

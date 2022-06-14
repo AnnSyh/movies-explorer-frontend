@@ -61,17 +61,6 @@ class MainApi extends Api {
             .then(this._checkResult);
     }
 
-    // updateUserInfo(user) {
-    //     // { user.name, user.email } = user;
-    //     console.log('MainApi:  updateUserInfo');
-    //     return fetch(`${this._serverUrl}/users/me`, {
-    //         method: 'PATCH',
-    //         headers: this._headers,
-    //         body: JSON.stringify(user)
-    //     })
-    //         .then(this._checkResult);
-    // }
-
     saveMovie(country, director, duration, year, description, image, trailerLink, thumbnail,
               movieId, nameRU, nameEN) {
         return fetch(`${this._serverUrl}/movies`, {

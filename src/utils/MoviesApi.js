@@ -7,7 +7,8 @@ class MoviesApi extends Api {
     }
 
     getAllMovies() {
-        return fetch(`${this._serverUrl}`, {
+        console.log('getAllMovies');
+        return fetch(`${this.serverUrl}`, {
             method: 'GET',
         })
             .then(super._checkResult);
