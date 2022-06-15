@@ -138,6 +138,13 @@
   color: #EE3465;
 }
 
+.profile__message {
+  color: #EE3465;
+}
+.profile__message_disabled {
+  display: none;
+}
+
 @media screen and (min-width: 456px) {
 
   .profile__wrapper {

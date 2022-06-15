@@ -12,6 +12,7 @@ import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import ImagePopup from '../ImagePopup/ImagePopup'; //всплывающие картинки
 import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие предупреждения
 import Preloader from '../Preloader/Preloader'; //крутилка
 
@@ -24,6 +25,32 @@ import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
 import * as auth from '../../utils/auth';
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [cards, setCards] = useState([]);
+  //получаем массив карточек
+  useEffect(() => {
+
+    setIsLoading(true);
+
+    moviesApi
+      .getAllMovies()
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch((err) => console.log(err));
+
+  }, []);
+
+
+
+
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)//открытие попапа карточки скартинкой
+  const handleImagePopupOpen = () => {
+    console.log('handleImagePopupOpen');
+    setIsImagePopupOpen(true)
+  }
 
 
   const [isFailInfoTooltipOpen, setisFailInfoTooltipOpen] = useState(false) // открытие всплывающих попапов
@@ -54,7 +81,16 @@ function App() {
   const closeAllPopups = () => {
     setisFailInfoTooltipOpen(false);
     setisSuccessInfoTooltipOpen(false);
+    setIsImagePopupOpen(false);
   };
+
+
+  const [savedMovies, setSavedMovies] = useState(null);
+
+  const [isDeleteMoviePopupOpen, setIsDeleteMoviePopupOpen] = useState(false);
+  const [isSaveMoviePopupOpen, setIsSaveMoviePopupOpen] = useState(false);
+
+  const [message, setMessage] = useState('');
 
   // ------------------------------functions------------------------------------
 
@@ -63,7 +99,7 @@ function App() {
     setIsApiError(true);
   }
 
-
+// авторизация пользователя (логин)
   function handleLogin(username, password) {
     // console.log('handleLogin: ');
     auth
@@ -81,6 +117,7 @@ function App() {
       })
   }
 
+  // регистрация пользователя 
   function handleRegister(email, password) {
     // console.log('handleRegister: ');
     auth
@@ -107,7 +144,6 @@ function App() {
       auth.getContent(token).then((res) => {
         if (res) {
           // console.log('111res = ', res);
-
           const { _id, email } = res;
           const userData = { _id, email }
           setUserData(userData)
@@ -122,8 +158,11 @@ function App() {
   function signOut() {
     localStorage.removeItem('token');
     setLoggedIn(false);
+    setCurrentUser({});
     history.push('/');
   }
+
+
 
   // Функция обновления пользователя 
   function handleUpdateUser(user) {
@@ -137,7 +176,17 @@ function App() {
         setCurrentUser(userData);
         closeAllPopups();
       })
-      .catch((err) => console.log(err))
+      // .catch((err) => console.log(err))
+      // .catch((err) => {
+      //   console.log('handleUpdateUser: catch ');
+      //   setisFailInfoTooltipOpen(true);
+      //   console.log(err);
+      // })
+      .catch((e) => {
+        setMessage(e.message);
+        console.log('message = ', message);
+      }
+      )
       .finally(
         () => {
           setIsSubmitting(false);
@@ -145,6 +194,60 @@ function App() {
         }
       );
   }
+
+  // добавление фильма в сохраненные
+  // 'https://api.nomoreparties.co/' + card.image.url, 
+  function handleSaveMovie(card) {
+    mainApi.saveMovie(
+                      card.country, 
+                      card.director, 
+                      card.duration, 
+                      card.year, 
+                      card.description, 
+                      'https://api.nomoreparties.co/' + card.image.url, 
+                      card.trailerLink, 
+                      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url,
+                      card.id, 
+                      card.nameRU, 
+                      card.nameEN
+      )
+      .then((res) => {
+        setSavedMovies([...savedMovies, res]);
+        localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
+      })
+      .catch(() => {
+        setIsSaveMoviePopupOpen(true);
+      })
+  }
+
+  // удаление фильма изсохраненных
+  function handleDeleteMovie(id) {
+    mainApi.deleteMovie(id)
+      .then((res) => {
+        setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
+      })
+      .catch(() => {
+        setIsDeleteMoviePopupOpen(true);
+      })
+  }
+
+  // получение сохраненных фильмов
+  function getAllSavedMovies() {
+
+    mainApi.updateTokenInHeaders();
+
+    mainApi.getAllSavedMovies()
+      .then((res) => {
+        setSavedMovies(res);
+        localStorage.setItem('savedMovies', JSON.stringify(res));
+      })
+      .catch((err) => {
+        handleApiError(err);
+      })
+  }
+
+
 
   // ----------useEffect------------------------------------------------------------------
   const [movies, setMovies] = useState([]);
@@ -195,7 +298,15 @@ function App() {
       });
   }, [loggedIn]);
 
-  //movies
+
+  //открываем попап с картинкой
+  const [selectedCard, setSelectedCard] = useState({});
+  // function handleCardClick(card) {
+  //   console.log('handleCardClick');
+  //   setSelectedCard(card)       //передаем  данные карточки
+  //   setIsImagePopupOpen(true)   //открываем попап скартинкой
+  //   setisFailInfoTooltipOpen(true)//открываем попап 'Что-то пошло не так!'
+  // };
 
 
   return (
@@ -229,6 +340,11 @@ function App() {
             path='/movies'
             loggedIn={loggedIn}
             preloading={preloading}
+            cards={cards}
+            handleSaveMovie={handleSaveMovie}
+
+            handleImagePopupOpen={handleImagePopupOpen}
+            // handleCardDeleteClick={handleCardDeleteClick}
 
             component={Movies}
           >
@@ -238,6 +354,11 @@ function App() {
           <ProtectedRoute
             path='/saved-movies'
             loggedIn={loggedIn}
+            cards={cards}
+            handleSaveMovie={handleSaveMovie}
+
+            handleImagePopupOpen={handleImagePopupOpen}
+
             component={SavedMovies}
           >
             <Footer />
@@ -273,6 +394,14 @@ function App() {
           onClose={closeAllPopups}
           isOpen={isSuccessInfoTooltipOpen}
           message={'Поздравляю! Вы зарегистрировались'}
+        />
+
+        {/* /попап для картинки карточки */}
+        <ImagePopup
+          onClose={closeAllPopups}
+          isOpen={isImagePopupOpen}
+          name={selectedCard.name}
+          link={selectedCard.link}
         />
 
       </CurrentUserContext.Provider>

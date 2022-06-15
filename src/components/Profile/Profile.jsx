@@ -7,10 +7,13 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
-    // console.log('props = ', props);
+
+    console.log('props = ',props);
+
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
-    // console.log('currentUser = ', currentUser);
+
     const [isEditModeOn, setIsEditModeOn] = useState(false);
+    const [isUpdateUser, setIsUpdateUser] = useState(false);
     // ----------------------------
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
     //передаем введенный в поля текст
@@ -21,6 +24,7 @@ function Profile(props) {
     }, [currentUser, resetForm]);
 
     const profileLinks = <>
+
         <button onClick={handleEditButton}
             type='submit'
             className='profile__link link profile__link-edit'
@@ -31,9 +35,11 @@ function Profile(props) {
             className='link profile__link  profile__link_exit'>
             Выйти из аккаунта
         </div>
+
     </>
     const profileButton = <>
         <span className='profile__error'>
+            `${props.setMessage}`
             При обновлении профиля произошла ошибка.
         </span>
 
@@ -50,7 +56,9 @@ function Profile(props) {
     </>
 
     function handleEditButton() {
+        console.log('handleEditButton');
         setIsEditModeOn(true);
+        console.log('handleEditButton isEditModeOn = ', isEditModeOn);
     }
 
     function handleSubmitButtonClick(e) {
@@ -58,9 +66,10 @@ function Profile(props) {
         e.preventDefault();
         setIsEditModeOn(false);
 
-        if(isValid){
+        if (isValid) {
             console.log('handleSubmitButtonClick: isValid = ', isValid);
-            props.onUpdateUser(values);  
+            props.onUpdateUser(values);
+            setIsUpdateUser(true);
         }
 
     }
@@ -117,6 +126,14 @@ function Profile(props) {
                         </fieldset>
 
                         <div className='profile__links'>
+                            <p className={
+                                isUpdateUser && !isEditModeOn
+                                    ? 'profile__message '
+                                    : 'profile__message profile__message_disabled'
+                            }
+                            >Данные успешно изменены<br/>
+                            {errors.name}  {errors.email}
+                            </p>
                             {isEditModeOn ? profileButton : profileLinks}
                         </div>
                     </form>

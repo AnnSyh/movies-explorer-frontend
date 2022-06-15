@@ -33,7 +33,7 @@ class MainApi extends Api {
     }
 
     updateTokenInHeaders() {
-        console.log(' !!! updateTokenInHeaders:  token = ', `Bearer ${localStorage.getItem('token')}`);
+        // console.log(' !!! updateTokenInHeaders:  token = ', `Bearer ${localStorage.getItem('token')}`);
         this._headers = {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ class MainApi extends Api {
     }
 
     getUserInfo() {
-        console.log(' !!! getUserInfo: fetch( ', `${this._serverUrl}/users/me`);
+        // console.log(' !!! getUserInfo: fetch( ', `${this._serverUrl}/users/me`);
         return fetch(`${this._serverUrl}/users/me`, {
             method: 'GET',
             headers: this._headers
@@ -61,15 +61,35 @@ class MainApi extends Api {
             .then(this._checkResult);
     }
 
-    saveMovie(country, director, duration, year, description, image, trailerLink, thumbnail,
-              movieId, nameRU, nameEN) {
-        return fetch(`${this._serverUrl}/movies`, {
-            method: 'POST',
-            headers: this._headers,
-            body: JSON.stringify({
-                country: country, director: director, duration: duration, year: year,
-                description: description, image: image, trailerLink: trailerLink, thumbnail: thumbnail,
-                movieId : movieId, nameRU: nameRU, nameEN: nameEN
+    saveMovie(
+                country, 
+                director, 
+                duration, 
+                year, 
+                description, 
+                image, 
+                trailerLink, 
+                thumbnail,
+                movieId, 
+                nameRU, 
+                nameEN
+            ) {
+            console.log(' !!! saveMovie: fetch( ', `${this._serverUrl}/movies`);  
+            return fetch(`${this._serverUrl}/movies`, {
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({
+                    country: country, 
+                    director: director, 
+                    duration: duration, 
+                    year: year,
+                    description: description, 
+                    image: image, 
+                    trailerLink: trailerLink, 
+                    thumbnail: thumbnail,
+                    movieId : movieId, 
+                    nameRU: nameRU, 
+                    nameEN: nameEN
             })
         })
             .then(this._checkResult);
