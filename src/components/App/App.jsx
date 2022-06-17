@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -19,6 +19,13 @@ import Preloader from '../Preloader/Preloader'; //крутилка
 import api from '../../utils/api';
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
+import { // ERROR_CODE_INTERNAL
+  BASE_URL,
+  MOVIES_URL,
+  ERROR_CODE_INTERNAL_DEL,
+  ERROR_CODE_INTERNAL_ADD
+
+} from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
@@ -27,34 +34,11 @@ import * as auth from '../../utils/auth';
 function App() {
 
   const [isLoading, setIsLoading] = useState(false);
-
   const [cards, setCards] = useState([]);
-  //получаем массив карточек
-  useEffect(() => {
+  const [popupOpen, setPopupOpen] = useState(false)//открытие попапа общего
 
-    setIsLoading(true);
-
-    moviesApi
-      .getAllMovies()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => console.log(err));
-
-  }, []);
-
-
-
-
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)//открытие попапа карточки скартинкой
-  const handleImagePopupOpen = () => {
-    console.log('handleImagePopupOpen');
-    setIsImagePopupOpen(true)
-  }
-
-
-  const [isFailInfoTooltipOpen, setisFailInfoTooltipOpen] = useState(false) // открытие всплывающих попапов
   const [isSuccessInfoTooltipOpen, setisSuccessInfoTooltipOpen] = useState(false)
+
   const [loggedIn, setLoggedIn] = useState(false) //регистрация
   const [currentUser, setCurrentUser] = useState({});  //  Отправляем запрос в API и устанавливаем текущего юзера
   const [isApiError, setIsApiError] = useState(false); //Запрос не выполнен:
@@ -67,39 +51,42 @@ function App() {
 
   const [preloading, setPreloading] = useState(false); // крутилка
 
-
-  const handleFailInfoTooltipOpen = () => {
-    console.log('handleFailInfoTooltipOpen');
-    setisFailInfoTooltipOpen(true)
-  }
-  const handleSuccessInfoTooltipOpen = () => {
-    console.log('handleSuccessInfoTooltipOpen');
-    setisSuccessInfoTooltipOpen(true)
-  }
-
-  //закрываем все попапы
-  const closeAllPopups = () => {
-    setisFailInfoTooltipOpen(false);
-    setisSuccessInfoTooltipOpen(false);
-    setIsImagePopupOpen(false);
-  };
-
-
-  const [savedMovies, setSavedMovies] = useState(null);
+  const [savedMovies, setSavedMovies] = useState({}); //сохраняем сюда выбранные фильмы
+  const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || null);
 
   const [isDeleteMoviePopupOpen, setIsDeleteMoviePopupOpen] = useState(false);
   const [isSaveMoviePopupOpen, setIsSaveMoviePopupOpen] = useState(false);
 
   const [message, setMessage] = useState('');
 
+  const [movies, setMovies] = useState([]);
+
+  const { pathname } = useLocation();
+
+  const [messageText, setMessageText] = React.useState('сообщения для ошибок');// сообщения для ошибок
+
   // ------------------------------functions------------------------------------
+
+  const handleSuccessInfoTooltipOpen = () => {
+    setisSuccessInfoTooltipOpen(true)
+  }
+
+  //закрываем все попапы
+  const closeAllPopups = () => {
+    setisSuccessInfoTooltipOpen(false);
+    setPopupOpen(false);
+  };
+
+  const handlePopupOpen = () => { //открытие попапа общегосинфой
+    setPopupOpen(true)
+  }
 
   function handleApiError(err) {
     console.log('Запрос не выполнен: ', err);
     setIsApiError(true);
   }
 
-// авторизация пользователя (логин)
+  // авторизация пользователя (логин)
   function handleLogin(username, password) {
     // console.log('handleLogin: ');
     auth
@@ -111,9 +98,8 @@ function App() {
         setLoggedIn(true)                           // меняем состояние на залогинен
       })
       .catch((err) => {
-        console.log('handleLogin: catch ');
-        setisFailInfoTooltipOpen(true);
-        console.log(err);
+        setMessageText(`handleLogin: catch: ` + err);
+        setPopupOpen(true);
       })
   }
 
@@ -127,9 +113,8 @@ function App() {
         history.push('/signin')
       })
       .catch((err) => {
-        console.log('handleRegister: catch ');
-        setisFailInfoTooltipOpen(true);
-        console.log(err);
+        setMessageText(`handleRegister: catch: ` + err);
+        setPopupOpen(true);
       })
   }
 
@@ -141,16 +126,18 @@ function App() {
     console.log('tokenCheck: token = ', token);
 
     if (localStorage.getItem('token')) {
-      auth.getContent(token).then((res) => {
-        if (res) {
-          // console.log('111res = ', res);
-          const { _id, email } = res;
-          const userData = { _id, email }
-          setUserData(userData)
-          setLoggedIn(true)
-          history.push('/');
-        }
-      });
+      auth
+        .getContent(token)
+        .then((res) => {
+          if (res) {
+            // console.log('111res = ', res);
+            const { _id, email } = res;
+            const userData = { _id, email }
+            setUserData(userData)
+            setLoggedIn(true)
+            history.push('/');
+          }
+        });
     }
   }
 
@@ -161,8 +148,6 @@ function App() {
     setCurrentUser({});
     history.push('/');
   }
-
-
 
   // Функция обновления пользователя 
   function handleUpdateUser(user) {
@@ -176,15 +161,11 @@ function App() {
         setCurrentUser(userData);
         closeAllPopups();
       })
-      // .catch((err) => console.log(err))
-      // .catch((err) => {
-      //   console.log('handleUpdateUser: catch ');
-      //   setisFailInfoTooltipOpen(true);
-      //   console.log(err);
-      // })
       .catch((e) => {
-        setMessage(e.message);
-        console.log('message = ', message);
+        // setMessage(e.message);
+        // console.log('message = ', message);
+        setMessageText(`handleUpdateUser: catch: ` + e + `e.message = ` + e.message);
+        setPopupOpen(true);
       }
       )
       .finally(
@@ -195,74 +176,195 @@ function App() {
       );
   }
 
-  // добавление фильма в сохраненные
+
+  // Функция добавление фильма в сохраненные(клик по чекбоксу карточки филима)
   // 'https://api.nomoreparties.co/' + card.image.url, 
   function handleSaveMovie(card) {
+
+    const extantMovie = savedMovies.movies.find((item) => {
+      if (item.movieId === card.id || item.movieId === card.movieId) {
+        return item
+      } else {
+        return savedMovies
+      }
+    })
+
+    console.log('extantMovie.nameRU = ', extantMovie.nameRU);
+
+    // if (savedMovies.movies.length === 0) {
+
+    //   setMessageText('такой фильм у вас уже есть');
+    //   setPopupOpen(true);
+
+    // } else {
+
+    // }
+
+
     mainApi.saveMovie(
-                      card.country, 
-                      card.director, 
-                      card.duration, 
-                      card.year, 
-                      card.description, 
-                      'https://api.nomoreparties.co/' + card.image.url, 
-                      card.trailerLink, 
-                      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url,
-                      card.id, 
-                      card.nameRU, 
-                      card.nameEN
-      )
+      card.country || 'unknown',
+      card.director || 'unknown',
+      card.duration || 0,
+      card.year || 'unknown',
+      card.description || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.url || 'unknown',
+      card.trailerLink || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
+      card.id,
+      card.nameRU || 'unknown',
+      card.nameEN || 'unknown'
+    )
       .then((res) => {
         setSavedMovies([...savedMovies, res]);
         localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
       })
-      .catch(() => {
-        setIsSaveMoviePopupOpen(true);
+      .catch((err) => {
+        console.log('saveMovie: catch: err = ', err);
+        // errorsApi(err)
+        if (err === 'Ошибка: 400') {
+          setMessageText(ERROR_CODE_INTERNAL_ADD); // Bad Request
+        } else if (err === 'Ошибка: 500') {
+          setMessageText(ERROR_CODE_INTERNAL_ADD);
+        } else if (err === 'savedMovies is not iterable') {
+          setMessageText('фильм успешно добавился');
+        }
+        setMessageText(ERROR_CODE_INTERNAL_ADD);
+        setPopupOpen(true);
       })
+
+
   }
 
-  // удаление фильма изсохраненных
-  function handleDeleteMovie(id) {
-    mainApi.deleteMovie(id)
-      .then((res) => {
-        setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
-        localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
+  // Функция удаление фильма из сохраненных (значит из mongodb)
+  function handleDeleteMovie(movie) {
+    if (savedMovies.movies.length === 0) {
+
+      setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+      setPopupOpen(true);
+
+    } else {
+
+      const dellMovie = savedMovies.movies.find((item) => {
+        if (item.movieId === movie.id || item.movieId === movie.movieId) {
+          return item
+        } else {
+          return savedMovies
+        }
       })
-      .catch(() => {
-        setIsDeleteMoviePopupOpen(true);
-      })
+
+      mainApi.deleteMovie(dellMovie._id)
+        .then((res) => {
+          setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
+          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
+        })
+        .catch((err) => {
+          // errorsApi(err)
+          if (err === 'Ошибка: 400') {
+            setMessageText(ERROR_CODE_INTERNAL_DEL); // Bad Request
+          } else if (err === 'Ошибка: 500') {
+            setMessageText(ERROR_CODE_INTERNAL_DEL);
+          } else {
+            setMessageText(ERROR_CODE_INTERNAL_DEL);
+          }
+          setMessageText(ERROR_CODE_INTERNAL_DEL);
+          setPopupOpen(true);
+        })
+    }
+
   }
 
-  // получение сохраненных фильмов
-  function getAllSavedMovies() {
+  // function handleDeleteMovie(movie) {
+  //   console.log('handleDelleteMovie');
 
-    mainApi.updateTokenInHeaders();
+  //   if (savedMovies.movies.length === 0) {
+  //     setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+  //     setPopupOpen(true);
+  //     // return savedMovies  // как выйти из function handleDeleteMovie ?
+  //   } else {
 
-    mainApi.getAllSavedMovies()
+  //     mainApi
+  //       .deleteMovie(movie.id)
+  //       .then((res) => {
+  //         setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
+  //         localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+  //       })
+  //       .catch((err) => {
+  //         console.log('deleteMovie: catch: err = ', err);
+  //         errorsApi(err)
+  //       })
+  //   }
+
+  // }
+
+  // Функция получение фильмов и сохранение их 
+  function getSavedMovies() {
+
+    mainApi
+      .updateTokenInHeaders();
+
+    mainApi
+      .getSavedMovies()
       .then((res) => {
         setSavedMovies(res);
         localStorage.setItem('savedMovies', JSON.stringify(res));
+        console.log('localStorage.savedMovies = ', localStorage.savedMovies);
       })
       .catch((err) => {
         handleApiError(err);
+        setMessageText(`getSavedMovies: catch: ` + err);
+        setPopupOpen(true);
       })
   }
 
 
 
   // ----------useEffect------------------------------------------------------------------
-  const [movies, setMovies] = useState([]);
-  //получаем массив фильмов
+
+  //   // состояние карточки  лайкнутые/нет
+  //   useEffect(() => {
+  //     if (localStorage.getItem('saved2') === 'true') {
+  //         setSaved(true);
+  //     } else {
+  //         setSaved(false);
+  //     }
+  // }, [currentUser]);
+
+
+
+  //получение сохраненных пользователем фильмов
   useEffect(() => {
-    console.log('useEffect');
+    if (loggedIn) {
+      mainApi
+        .getSavedMovies()
+        .then((data) => {
+          console.log('SavedMovies = ', data)
+          setSavedMovies(data);
+          // localStorage.setItem('SavedMovies', savedMovies ); // ???
+        })
+        .catch(err => {
+          setMessageText(`getSavedMovies: catch: ` + err);
+          setPopupOpen(true);
+        })
+    }
+  }, [loggedIn]);
+
+
+  //получаем массив карточек фильмов
+  useEffect(() => {
+    setIsLoading(true);
+
     moviesApi
       .getAllMovies()
-      .then((movies) => {
-        console.log('moviesApi movies= ', movies);
-        setMovies(movies)
+      .then((cards) => {
+        setCards(cards);
       })
-      .catch((err) => console.log(err));
+      .catch(err => {
+        setMessageText(`getAllMovies: catch: ` + err);
+        setPopupOpen(true);
+      })
 
   }, []);
+
 
   // кнопка Escape
   useEffect(() => {
@@ -285,28 +387,17 @@ function App() {
     if (!loggedIn) {
       return;
     }
-
-    console.log('useEffect: loggedIn = ', loggedIn);
     history.push('/movies');
-
     mainApi.updateTokenInHeaders();
-
-    mainApi.getUserInfo()
+    mainApi
+      .getUserInfo()
       .then(setCurrentUser)
       .catch((err) => {
         handleApiError(err);
+        setMessageText(`useEffect() getUserInfo catch: ` + err);
+        setPopupOpen(true);
       });
   }, [loggedIn]);
-
-
-  //открываем попап с картинкой
-  const [selectedCard, setSelectedCard] = useState({});
-  // function handleCardClick(card) {
-  //   console.log('handleCardClick');
-  //   setSelectedCard(card)       //передаем  данные карточки
-  //   setIsImagePopupOpen(true)   //открываем попап скартинкой
-  //   setisFailInfoTooltipOpen(true)//открываем попап 'Что-то пошло не так!'
-  // };
 
 
   return (
@@ -314,15 +405,14 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Header
           loggedIn={loggedIn}
-        // signOut={signOut}
-        // isLoggedIn={false}
-        // isLoggedIn={true} 
+          pathname={pathname}
         />
 
         <Switch>
 
           <Route path='/signup'>
-            <Register handleRegister={handleRegister}
+            <Register
+              handleRegister={handleRegister}
             />
           </Route>
 
@@ -336,36 +426,41 @@ function App() {
           </Route>
 
 
-          <ProtectedRoute
-            path='/movies'
+          <ProtectedRoute path='/movies'
             loggedIn={loggedIn}
             preloading={preloading}
             cards={cards}
-            handleSaveMovie={handleSaveMovie}
 
-            handleImagePopupOpen={handleImagePopupOpen}
-            // handleCardDeleteClick={handleCardDeleteClick}
+            handleSaveMovie={handleSaveMovie}
+            handleDeleteMovie={handleDeleteMovie}
+
+            isLoading={isLoading}
+            setFilteredMovies={setFilteredMovies}
+
+            handlePopupOpen={handlePopupOpen}
 
             component={Movies}
           >
             <Footer />
           </ProtectedRoute>
 
-          <ProtectedRoute
-            path='/saved-movies'
+          <ProtectedRoute path='/saved-movies'
             loggedIn={loggedIn}
             cards={cards}
-            handleSaveMovie={handleSaveMovie}
 
-            handleImagePopupOpen={handleImagePopupOpen}
+            handleSaveMovie={handleSaveMovie}
+            handleDeleteMovie={handleDeleteMovie}
+
+            getSavedMovies={getSavedMovies}
+
+            handlePopupOpen={handlePopupOpen}
 
             component={SavedMovies}
           >
             <Footer />
           </ProtectedRoute>
 
-          <ProtectedRoute
-            path='/profile'
+          <ProtectedRoute path='/profile'
             loggedIn={loggedIn}
             signOut={signOut}
             userData={userData}
@@ -382,11 +477,11 @@ function App() {
 
         </Switch>
 
-        {/* попап для не успешной регистрации */}
+        {      /* попап с ошибкой */}
         <InfoTooltip
+          message={messageText}
+          isOpen={popupOpen}
           onClose={closeAllPopups}
-          isOpen={isFailInfoTooltipOpen}
-          message={'Что-то пошло не так! Попробуйте ещё раз.'}
         />
 
         {/* /попап для успешной регистрации */}
@@ -394,14 +489,6 @@ function App() {
           onClose={closeAllPopups}
           isOpen={isSuccessInfoTooltipOpen}
           message={'Поздравляю! Вы зарегистрировались'}
-        />
-
-        {/* /попап для картинки карточки */}
-        <ImagePopup
-          onClose={closeAllPopups}
-          isOpen={isImagePopupOpen}
-          name={selectedCard.name}
-          link={selectedCard.link}
         />
 
       </CurrentUserContext.Provider>

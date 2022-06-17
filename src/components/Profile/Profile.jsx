@@ -8,7 +8,7 @@ import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
 
-    console.log('props = ',props);
+    // console.log('Profile props = ',props);
 
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
 
@@ -16,6 +16,15 @@ function Profile(props) {
     const [isUpdateUser, setIsUpdateUser] = useState(false);
     // ----------------------------
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
+
+    const [name, setName] = useState(currentUser.name);
+    const [previousName, setPreviousName] = useState(currentUser.name);
+    const [email, setEmail] = React.useState(currentUser.email);
+    const [previousEmail, setPreviousEmail] = useState(currentUser.email);
+    const [isActiveButton, setIsActiveButton] = useState(false); //для активности кнопки Сохранить
+
+
+
     //передаем введенный в поля текст
     useEffect(() => {
         if (currentUser) {
@@ -43,6 +52,8 @@ function Profile(props) {
             При обновлении профиля произошла ошибка.
         </span>
 
+        <p>isActiveButton = `${isActiveButton}`</p>
+
         <button onClick={handleEditButton}
             type='submit'
             className={
@@ -51,20 +62,24 @@ function Profile(props) {
                     : 'profile__btn link profile__btn-valid'
             }
             disabled={!isValid}
+        // disabled={!isActiveButton}
         >Сохранить
         </button>
     </>
 
     function handleEditButton() {
-        console.log('handleEditButton');
         setIsEditModeOn(true);
-        console.log('handleEditButton isEditModeOn = ', isEditModeOn);
+
+        console.log('isActiveButton = ', isActiveButton);
+
+
     }
 
     function handleSubmitButtonClick(e) {
-        console.log('handleSubmitButtonClick');
         e.preventDefault();
         setIsEditModeOn(false);
+
+        console.log('isActiveButton = ', isActiveButton);
 
         if (isValid) {
             console.log('handleSubmitButtonClick: isValid = ', isValid);
@@ -72,6 +87,32 @@ function Profile(props) {
             setIsUpdateUser(true);
         }
 
+    }
+
+
+    //ввод данных, сверка со старыми
+    function handleUserName(evt) {
+
+        console.log('isActiveButton = ', isActiveButton);
+
+        const value = evt.target.value;
+        setName(value);
+        if (value !== previousName) {
+            setIsActiveButton(true);
+        } else {
+            setIsActiveButton(false);
+        }
+    }
+
+    //ввод данных, сверка со старыми
+    function handleUserEmail(evt) {
+        const value = evt.target.value;
+        setEmail(value);
+        if (value !== previousEmail) {
+            setIsActiveButton(true);
+        } else {
+            setIsActiveButton(false);
+        }
     }
 
 
@@ -104,6 +145,7 @@ function Profile(props) {
                                     value={values.name || ''}
                                     disabled={!isEditModeOn}
                                     onChange={handleChangeInput}
+                                    // onChange={handleChangeInput && handleUserName}
                                 />
                             </label>
                             <span className='profile__error'>{errors.name}</span>
@@ -120,6 +162,7 @@ function Profile(props) {
                                     value={values.email || ''}
                                     disabled={!isEditModeOn}
                                     onChange={handleChangeInput}
+                                    // onChange={handleChangeInput && handleUserEmail}
                                 />
                             </label>
                             <span className='profile__error'>{errors.email}</span>
@@ -127,12 +170,12 @@ function Profile(props) {
 
                         <div className='profile__links'>
                             <p className={
-                                isUpdateUser && !isEditModeOn
+                                isUpdateUser || !isEditModeOn
                                     ? 'profile__message '
                                     : 'profile__message profile__message_disabled'
                             }
-                            >Данные успешно изменены<br/>
-                            {errors.name}  {errors.email}
+                            >Данные успешно изменены<br />
+                                {errors.name}  {errors.email}
                             </p>
                             {isEditModeOn ? profileButton : profileLinks}
                         </div>

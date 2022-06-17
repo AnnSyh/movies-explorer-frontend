@@ -1,6 +1,6 @@
 // SavedMovies
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from '../Card/Card';
 import SearchForm from '../SearchForm/SearchForm';// тот-же что и на Movies.jsx
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -8,6 +8,11 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function SavedMovies(props) {
     console.log('Movies props= ', props);
+    console.log('Movies props.getSavedMovies = ', props.getSavedMovies);
+
+    useEffect(() => {
+        props.getSavedMovies();
+    }, []);
 
 
     // Подписываемся на контекст CurrentUserContext
@@ -15,10 +20,16 @@ function SavedMovies(props) {
 
     //результаты поиска
     const [serchRezalt, setSerchRezalt] = useState(false);
-    const [savedCard, setSavedCard] = useState(true);//отвечает за крестик на карточке
+    // const [savedCard, setSavedCard] = useState(true); //отвечает за крестик на карточке
 
     console.log('serchRezalt = ', serchRezalt);
     console.log('setSerchRezalt = ', setSerchRezalt);
+
+
+    const savedMovies = localStorage.getItem('savedMovies');
+
+    console.log('typeof(savedMovies) = ',typeof(savedMovies));
+    console.log('savedMovies.movies = ',savedMovies.movies);
 
     return (
         <div className='movies'>
@@ -33,8 +44,26 @@ function SavedMovies(props) {
                 <section className='section content__section'>
                     <div className='list-template-inner'>
 
+                    <h1>Object.values</h1>
+
+                    
+                      <p>{savedMovies}</p>
+
+
+
                         <ul className='cards__list list-template-place'>
-                            {props.cards.map((card) => {
+                            <li></li>
+
+                            {/* <p>localStorage.savedMovies = {localStorage.savedMovies}</p> */}
+
+
+
+                            {/* <p>{localStorage.savedMovies.map((card) => {
+                                return (<p>return</p>);
+                                })}</p> */}
+
+
+                            {/* {localStorage.savedMovies.map((card) => {
                                 return (
                                     <Card key={card.id}
                                         handleCardClick={() => props.handleCardClick(card)}
@@ -42,10 +71,10 @@ function SavedMovies(props) {
                                         {...card}
                                         // savedCard={false}
                                         // savedCard={true}
-                                        savedCard={savedCard}
+                                        savedCard={props.savedCard}
                                     />
                                 );
-                            })}
+                            })} */}
                         </ul>
 
                     </div>

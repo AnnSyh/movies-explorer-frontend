@@ -3,30 +3,29 @@ import { useState } from 'react';
 import './search-form.css';
 import { useForm, useFormWithValidation } from '../../hooks/useForm';
 
-function SearchForm() {
+function SearchForm(props) {
+
+// console.log('SearchForm: props = ',props)
+
   const [error, setError] = useState();
-  const [onlyShortFilms, setOnlyShortFilms] = useState(false);
   // ----------------------------
   const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
+  const [inputSearch, setInputSearch] = useState('');
 
   function clearError() {
     setError(null);
   }
 
-  function handleSwitch(e) {
-    setOnlyShortFilms(!onlyShortFilms);
-  }
 
   function handleSubmitForm(e) {
     clearError();
     e.preventDefault();
-    console.log('handleSubmitForm');
+    // console.log('handleSubmitForm');
 
     if (isValid) {
-      console.log('SearchForm (handleSubmitForm): isValid = ', isValid);
+      // console.log('SearchForm (handleSubmitForm): isValid = ', isValid);
       // добавить сюда поиск и выбор фильмов по ключевому слову 
-      console.log('добавить сюда поиск и выбор фильмов по ключевому слову');
-      // serchRezalt????
+      props.handleSearchSubmit(values.movie);
 
     } 
 
@@ -51,7 +50,7 @@ function SearchForm() {
             autoComplete='on'
             minLength='1'
             maxLength='15'
-            value={values.movie || ''}
+            value={values.movie || props.inputValue}
             onChange={handleChangeInput}
           />
           <button
@@ -79,8 +78,10 @@ function SearchForm() {
           <input
             type='checkbox'
             className='checkbox__input'
-            checked={onlyShortFilms || false}
-            onChange={handleSwitch}
+
+            checked={props.shortMovies || false}
+            onChange={props.checkBoxClick}
+
           />
           <span className='checkbox__slider'></span>
         </label>

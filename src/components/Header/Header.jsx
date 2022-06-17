@@ -7,10 +7,10 @@ import './header.css';
 import Navbar from '../NavBar/NavBar';
 
 function Header(props) {
-  // console.log('Headers: props = ', props);
-  // console.log('Headers: props.loggedIn = ', props.loggedIn);
-  // console.log('Headers: props.loggedIn = ', props.loggedIn);
+
   const [isBurgerOpened, setIsBurgerOpened] = useState(false);
+  const [location, setLocation] = useState('/');
+
 
   function handleBurgerIconClick() {
     console.log('handleBurgerIconClick');
@@ -20,7 +20,15 @@ function Header(props) {
   return (
     <>
       <div id='top'></div>
-      <header className='header'>
+      <header 
+        // className='header'
+        className={
+          props.pathname === '/signup' || props.pathname === '/signin'
+            ? 'header header__hidden'
+            : 'header'
+        }
+
+      >
         <div className='header__container'>
           <div className='header__mobile'>
             <Link to='/' className='header__mobile-logo-link'>

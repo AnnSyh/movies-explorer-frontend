@@ -41,7 +41,7 @@ function Auth(props) {
               title={props.ButtonText}
               btnClass={ props.btnDisabled
                 ? 'auth__btn auth__btn_disabled'
-                : 'auth__btn'
+                : 'auth__btn link'
               }
               btnDisabled={props.btnDisabled}
             />

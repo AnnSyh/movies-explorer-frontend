@@ -154,6 +154,21 @@
   width: 20px;
   height: 20px;
 }
+.true.checkbox__slider_green:before,
 .checkbox__slider_green:before {
   background-color: #2BE080;
 }
+
+.false.checkbox__slider_green:before,
+.checkbox__slider_green:before {
+  background-color: #ffffff;
+}
+
+.checkbox__slider_card:hover::before {
+  background-color: #2BE080;
+}
+
+/* .checkbox__slider_green:hover::before {
+  background-color: #FFFFFF;
+} */
+

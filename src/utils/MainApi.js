@@ -103,10 +103,13 @@ class MainApi extends Api {
             .then(this._checkResult);
     }
 
-    getAllSavedMovies() {
+    getSavedMovies() {
         return fetch(`${this._serverUrl}/movies`, {
             method: 'GET',
-            headers: this._headers,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            },
         })
             .then(this._checkResult);
     }

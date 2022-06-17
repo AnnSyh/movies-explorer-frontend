@@ -8,6 +8,7 @@ class Api {
           return res.json();
       } else {
           return Promise.reject(`Ошибка: ${res.status}`);
+        //   return Promise.reject(`При удалении фильма на сервере произошла ошибка, пожалуйста, обновите страницу и попробуйте еще раз`);
       }
   }
   
