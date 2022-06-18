@@ -33,6 +33,8 @@ function CardList(props) {
                                             handleSaveMovie={() => props.handleSaveMovie(card)}
                                             handleDeleteMovie={() => props.handleDeleteMovie(card)}
 
+                                            pathname={props.pathname}
+
                                             {...card}
                                         />
                                     );

@@ -189,7 +189,7 @@ function App() {
       }
     })
 
-    console.log('extantMovie.nameRU = ', extantMovie.nameRU);
+    // console.log('extantMovie.nameRU = ', extantMovie.nameRU);
 
     // if (savedMovies.movies.length === 0) {
 
@@ -221,15 +221,13 @@ function App() {
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
         // errorsApi(err)
-        if (err === 'Ошибка: 400') {
-          setMessageText(ERROR_CODE_INTERNAL_ADD); // Bad Request
-        } else if (err === 'Ошибка: 500') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
-        } else if (err === 'savedMovies is not iterable') {
+          setPopupOpen(true);
+        } else {
           setMessageText('фильм успешно добавился');
+          setPopupOpen(true);
         }
-        setMessageText(ERROR_CODE_INTERNAL_ADD);
-        setPopupOpen(true);
       })
 
 
@@ -259,15 +257,13 @@ function App() {
         })
         .catch((err) => {
           // errorsApi(err)
-          if (err === 'Ошибка: 400') {
-            setMessageText(ERROR_CODE_INTERNAL_DEL); // Bad Request
-          } else if (err === 'Ошибка: 500') {
-            setMessageText(ERROR_CODE_INTERNAL_DEL);
+          if (err === 'Ошибка: 400' || err === 'Ошибка: 500') {
+            setMessageText(ERROR_CODE_INTERNAL_DEL); 
+            setPopupOpen(true);
           } else {
-            setMessageText(ERROR_CODE_INTERNAL_DEL);
+            setMessageText('фильм успешно удалился');
+            setPopupOpen(true);
           }
-          setMessageText(ERROR_CODE_INTERNAL_DEL);
-          setPopupOpen(true);
         })
     }
 
@@ -337,9 +333,10 @@ function App() {
       mainApi
         .getSavedMovies()
         .then((data) => {
-          console.log('SavedMovies = ', data)
+          console.log('111 SavedUserMovies data = ', data)
+          console.log('111 SavedUserMovies data.movies = ', data.movies)
           setSavedMovies(data);
-          // localStorage.setItem('SavedMovies', savedMovies ); // ???
+          localStorage.setItem('savedMovies', JSON.stringify(data.movies));
         })
         .catch(err => {
           setMessageText(`getSavedMovies: catch: ` + err);
@@ -430,6 +427,7 @@ function App() {
             loggedIn={loggedIn}
             preloading={preloading}
             cards={cards}
+            pathname={pathname}
 
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
@@ -447,11 +445,14 @@ function App() {
           <ProtectedRoute path='/saved-movies'
             loggedIn={loggedIn}
             cards={cards}
+            pathname={pathname}
 
+            isLoading={isLoading}
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
 
-            getSavedMovies={getSavedMovies}
+            savedMovies={savedMovies}
+            setFilteredMovies={setFilteredMovies}
 
             handlePopupOpen={handlePopupOpen}
 

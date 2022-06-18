@@ -5,8 +5,13 @@ import './card.css';
 
 function Card(props) {
 
+    const [location, setLocation] = useState('/');
+
     // console.log('Card: props = ', props);
-    // console.log('Card: props.savedCard = ', props.savedCard);
+    // console.log('Card: props.pathname = ', props.pathname);
+    // console.log('Card: ? props.image = ', props.image);
+    // console.log('Card: ? props.image = ', 'https://api.nomoreparties.co' + props.image.url);
+    // console.log('Card: : "https://api.nomoreparties.co" + props.image.formats.thumbnail.url = ', 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url);
 
     // Подписываемся на контекст CurrentUserContext
     const currentUser = React.useContext(CurrentUserContext);
@@ -44,13 +49,13 @@ function Card(props) {
 
     //-------------useEffects-----------------------------------
     // состояние карточки  лайкнутые/нет
-    useEffect(() => {
-        if (localStorage.getItem('saved2') === 'true') {
-            setSaved(true);
-        } else {
-            setSaved(false);
-        }
-    }, [currentUser]);
+    // useEffect(() => {
+    //     if (localStorage.getItem('saved2') === 'true') {
+    //         setSaved(true);
+    //     } else {
+    //         setSaved(false);
+    //     }
+    // }, [currentUser]);
 
 
 
@@ -58,9 +63,13 @@ function Card(props) {
         <li className='cards__item'>
             <div className='cards__pic'>
                 <a className="link" href={props.trailerLink}>
+
                     <img className='cards__img'
-                        data-popup='open-img__popup'
-                        src={'https://api.nomoreparties.co' + props.image.formats.thumbnail.url}
+                        src={
+                            props.pathname === '/saved-movies'
+                            ? props.image 
+                            : 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url
+                        }
                         alt={props.nameRU}
                     />
                 </a>

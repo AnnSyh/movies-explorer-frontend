@@ -1,82 +1,143 @@
-// SavedMovies
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Card from '../Card/Card';
-import SearchForm from '../SearchForm/SearchForm';// тот-же что и на Movies.jsx
+import SearchForm from '../SearchForm/SearchForm';
+import CardList from '../CardList/CardList';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 
+
 function SavedMovies(props) {
-    console.log('Movies props= ', props);
-    console.log('Movies props.getSavedMovies = ', props.getSavedMovies);
-
-    useEffect(() => {
-        props.getSavedMovies();
-    }, []);
-
+    // console.log('Movies props= ', props);
+    // console.log('Movies props.setFilteredMovies= ', props.setFilteredMovies);
 
     // Подписываемся на контекст CurrentUserContext
     const currentUser = React.useContext(CurrentUserContext);
 
-    //результаты поиска
-    const [serchRezalt, setSerchRezalt] = useState(false);
-    // const [savedCard, setSavedCard] = useState(true); //отвечает за крестик на карточке
+    const [shortMovies, setShortMovies] = useState(false);
+    const [inputValue, setInputValue] = useState(false);
+    const [filteredMovies, setFilteredMovies] = useState([]);
+    const [initialMovies, setInitialMovies] = useState([])
+    const [nothingFound, setNothingFound] = useState(true);
+    const [isDataLoading, setIsDataLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
 
-    console.log('serchRezalt = ', serchRezalt);
-    console.log('setSerchRezalt = ', setSerchRezalt);
 
 
-    const savedMovies = localStorage.getItem('savedMovies');
+    // ------------functions-----------------
+    //фильтр по ключевому слову
+    function filterMovies(movies, request, shortMoviesCheckbox) {
+        const moviesByRequest = movies.filter((movie) => {
+            return movie.nameRU.toLowerCase().includes(request.toLowerCase())
+        });
 
-    console.log('typeof(savedMovies) = ',typeof(savedMovies));
-    console.log('savedMovies.movies = ',savedMovies.movies);
+        if (shortMoviesCheckbox) {
+            return filterShortMovies(moviesByRequest);
+        } else {
+            return moviesByRequest;
+        }
+    };
+
+    //фильтр по длительности
+    function filterShortMovies(movies) {
+        return movies.filter((movie) => movie.duration <= 40);
+    };
+
+    //поиск среди сохраненных фильмов
+      function handleSearchSubmit(inputValue) {
+        localStorage.setItem('savedMoviesSearch', inputValue);
+        // if(filterMovies(savedMoviesList, inputValue, shortMovies).length === 0) {
+        //   setNothingFound(true)
+        // } else {
+        //   setNothingFound(false)
+        //   setFilteredMovies(filterMovies(savedMoviesList, inputValue, shortMovies))
+        //   setShowedMovies(filterMovies(savedMoviesList, inputValue, shortMovies))
+        //   localStorage.setItem('savedMovies', JSON.stringify(savedMoviesList));
+        // }
+      }
+
+
+    // установка чекбокса
+    function handleShortFilms() {
+        setShortMovies(!shortMovies);
+        if (!shortMovies) {
+            if (filterShortMovies(initialMovies).length === 0) {
+                setFilteredMovies(filterShortMovies(initialMovies));
+                setNothingFound(true);
+            } else {
+                setFilteredMovies(filterShortMovies(initialMovies));
+                setNothingFound(false);
+            }
+        } else {
+            initialMovies.length === 0 ? setNothingFound(true) : setNothingFound(false);
+            setFilteredMovies(initialMovies);
+        }
+        // запомним выбранный чекбокс
+        localStorage.setItem('shortMovies', !shortMovies);
+    }
+
+    //-------------useEffects-----------------------------------
+
+    //состояние инпута в локальном хранилище
+    useEffect(() => {
+        if (localStorage.getItem('movieSearch')) {
+            setInputValue(localStorage.getItem('movieSearch'));
+        }
+    }, []);
+
+    //состояние тумблера в локальном хранилище
+    useEffect(() => {
+        if (localStorage.getItem('shortMovies') === "true") {
+            setShortMovies(true);
+        } else {
+            setShortMovies(false);
+        }
+    }, [currentUser]);
+
+    //отображение карточек из локального хранилища
+    useEffect(() => {
+        
+        if (localStorage.getItem('savedMovies')) {
+            const movies = JSON.parse(localStorage.getItem('savedMovies'));
+            movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
+            setInitialMovies(movies);
+            if (localStorage.getItem('shortMovies') === "true") {
+                setFilteredMovies(filterShortMovies(movies));
+            } else {
+                setFilteredMovies(movies);
+            }
+        } else {
+            setNothingFound(true)
+        }
+    }, [currentUser]);
+
+
 
     return (
         <div className='movies'>
             <div className='container movies__container'>
-
-                <p>Сохраненные фильмы</p>
-
                 <section className='search section content__section'>
-                    <SearchForm />
+                    <SearchForm
+                        handleSearchSubmit={handleSearchSubmit}
+                        setFilteredMovies={props.setFilteredMovies}
+                        isLoading={props.isLoading}
+
+                        checkBoxClick={handleShortFilms}
+                        inputValue={inputValue}
+                        shortMovies={shortMovies}
+                    />
                 </section>
 
                 <section className='section content__section'>
                     <div className='list-template-inner'>
+                        <CardList
+                            nothingFound={nothingFound}
+                            moviesList={filteredMovies}
+                            pathname={props.pathname}
 
-                    <h1>Object.values</h1>
-
-                    
-                      <p>{savedMovies}</p>
-
-
-
-                        <ul className='cards__list list-template-place'>
-                            <li></li>
-
-                            {/* <p>localStorage.savedMovies = {localStorage.savedMovies}</p> */}
-
-
-
-                            {/* <p>{localStorage.savedMovies.map((card) => {
-                                return (<p>return</p>);
-                                })}</p> */}
-
-
-                            {/* {localStorage.savedMovies.map((card) => {
-                                return (
-                                    <Card key={card.id}
-                                        handleCardClick={() => props.handleCardClick(card)}
-                                        handleCardDelete={() => props.handleCardDelete(card)}
-                                        {...card}
-                                        // savedCard={false}
-                                        // savedCard={true}
-                                        savedCard={props.savedCard}
-                                    />
-                                );
-                            })} */}
-                        </ul>
-
+                            handleSaveMovie={props.handleSaveMovie}
+                            handleDeleteMovie={props.handleDeleteMovie}
+                        >
+                        </CardList>
                     </div>
                 </section>
             </div>

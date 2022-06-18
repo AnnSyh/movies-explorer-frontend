@@ -8,12 +8,13 @@ import Navbar from '../NavBar/NavBar';
 
 function Header(props) {
 
+  // console.log('Header: props.pathname = ', props.pathname);
+
   const [isBurgerOpened, setIsBurgerOpened] = useState(false);
   const [location, setLocation] = useState('/');
 
 
   function handleBurgerIconClick() {
-    console.log('handleBurgerIconClick');
     setIsBurgerOpened(!isBurgerOpened);
   }
 

@@ -89,6 +89,11 @@ function Movies(props) {
         localStorage.setItem('shortMovies', !shortMovies);
     }
 
+    //кнопка more
+    function handleCardElse(){
+        console.log('handleCardElse');
+    }
+
     //-------------useEffects-----------------------------------
 
     //состояние инпута в локальном хранилище
@@ -187,10 +192,10 @@ function Movies(props) {
                                                 })
                                                 }
                                             </ul> */}
-                                            {/* <button
+                                            <button
                                                 className='btn__else link'
-                                            // onClick={handleCardElse}
-                                            >Еще</button> */}
+                                            onClick={handleCardElse}
+                                            >Еще</button>
 
                                         </>
                                     }
