@@ -221,7 +221,7 @@ function App() {
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
         // errorsApi(err)
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         } else {
@@ -235,37 +235,65 @@ function App() {
 
   // Функция удаление фильма из сохраненных (значит из mongodb)
   function handleDeleteMovie(movie) {
-    if (savedMovies.movies.length === 0) {
+    // if (savedMovies.movies.length === 0) {
 
-      setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
-      setPopupOpen(true);
+    //   setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+    //   setPopupOpen(true);
 
-    } else {
+    // } else {
 
-      const dellMovie = savedMovies.movies.find((item) => {
+      const savedMoviesArr = savedMovies.movies;
+
+      const dellMovie = savedMoviesArr.find((item) => {
         if (item.movieId === movie.id || item.movieId === movie.movieId) {
           return item
         } else {
-          return savedMovies
+          return savedMoviesArr
         }
       })
+      // const dellMovie ={};
+
+      // if ({pathname} === '/movies') {
+      //    dellMovie = savedMoviesArr.find( (item) =>  item.movieId === movie.id);
+      //   } else 
+      //   if ({pathname} === '/saved-movies') {
+      //     dellMovie = savedMoviesArr.find((item) =>  item.movieId === movie.movieId );
+      //   }
+
+
+      console.log('dellMovie = ', dellMovie);
+      console.log('dellMovie._id = ', dellMovie._id);
 
       mainApi.deleteMovie(dellMovie._id)
         .then((res) => {
-          setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
-          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
+
+          const newMovie = setSavedMovies.filter((m) => {
+              if (m.movieId === movie.id || m.movieId === movie.movieId){
+              return false
+            } else {
+              return true
+            }
+          })
+
+          // const newMovies =  setSavedMovies(savedMovies.filter((movie) =>
+          //  !(movie._id === dellMovie._id))
+          //  );
+          // localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === dellMovie._id))));
+          setSavedMovies(newMovie);
+          // setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
+          // localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
         })
         .catch((err) => {
           // errorsApi(err)
-          if (err === 'Ошибка: 400' || err === 'Ошибка: 500') {
-            setMessageText(ERROR_CODE_INTERNAL_DEL); 
+          if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+            setMessageText(ERROR_CODE_INTERNAL_DEL);
             setPopupOpen(true);
           } else {
             setMessageText('фильм успешно удалился');
             setPopupOpen(true);
           }
         })
-    }
+    // }
 
   }
 

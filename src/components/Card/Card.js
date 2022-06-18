@@ -17,28 +17,31 @@ function Card(props) {
     const currentUser = React.useContext(CurrentUserContext);
 
     const [saved, setSaved] = useState(false);
-    
+
     const [savedMovies, setSavedMovies] = useState({});
 
-    
+    // удаление фильма из базы mongodb
+    function handleTrashClick() {
+        props.handleDeleteMovie()
+    }
 
-
+//выделение выбранного пользователем фильма
     function handleCheckboxClick() {
         setSaved(!saved);
 
         if (saved) {
-        // if (false) {
-        // if(true){
+            // if (false) {
+            // if(true){
             console.log('if удаление фильма из базы mongodb')
             console.log('saved = ', saved)
-            localStorage.setItem('saved2', false  );
+            localStorage.setItem('saved2', false);
             console.log('localStorage.getItem(saved2) = ', localStorage.getItem('saved2'))
 
             props.handleDeleteMovie()
         } else {
             console.log('else добавление фильма в базу mongodb')
             console.log('saved = ', saved)
-            localStorage.setItem('saved2', true );
+            localStorage.setItem('saved2', true);
             console.log('localStorage.getItem(saved2) = ', localStorage.getItem('saved2'))
 
             props.handleSaveMovie()
@@ -57,6 +60,26 @@ function Card(props) {
     //     }
     // }, [currentUser]);
 
+    const label = (
+        <label className="checkbox checkbox_img" >
+            <span
+                className={
+                    // !saved
+                    !localStorage.getItem('saved2')
+                        ? `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card`
+                        : `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card checkbox__slider_green`
+                }
+                onClick={handleCheckboxClick}
+            ></span>
+        </label >
+    )
+
+    const cross = (
+        <>
+            <button className="cards__trash" onClick={handleTrashClick}></button>
+        </>
+    )
+
 
 
     return (
@@ -67,8 +90,8 @@ function Card(props) {
                     <img className='cards__img'
                         src={
                             props.pathname === '/saved-movies'
-                            ? props.image 
-                            : 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url
+                                ? props.image
+                                : 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url
                         }
                         alt={props.nameRU}
                     />
@@ -77,17 +100,12 @@ function Card(props) {
             <div className='cards__text'>
                 <div className='cards__tex-row'>
                     <h2 className='cards__title text-overflow'>{props.nameRU}</h2>
-                    <label className="checkbox checkbox_img">
-                        <span
-                            className={
-                                // !saved
-                                !localStorage.getItem('saved2')
-                                    ? `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card`
-                                    : `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card checkbox__slider_green`
-                            }
-                            onClick={handleCheckboxClick}
-                        ></span>
-                    </label>
+
+                    {
+                        props.pathname === '/saved-movies'
+                            ? cross
+                            : label
+                    }
                 </div>
                 <div className='cards__tex-row'>
                     <div className='cards__time'>{props.duration}</div>

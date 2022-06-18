@@ -4,17 +4,15 @@ import ProfileImgSrc from '../../images/icon-main.svg';
 
 function NavBar(props) {
 
-  // console.log('NavBar: props = ', props);
-  // console.log('NavBar: props.loggedIn = ', props.loggedIn);
-
-  // if (!props.loggedIn) {
-  //   props.isBurgerOpened = true;
-  // }
-
   //убираем .header__overlay-visible при переходе на гл стр 
-  function mainLinkClick() {
+  function linkClick() {
+    const headerNav = document.querySelector('.header__nav');
+    headerNav.classList.remove('header__nav_visible');
     const overlay = document.querySelector('.header__overlay-visible');
     overlay.classList.remove('header__overlay-visible')
+    // const hamburger = document.querySelector('.hamburger');
+    // hamburger.classList.remove('open')
+    // hamburger.classList.add('closed')
   }
 
 
@@ -27,21 +25,24 @@ function NavBar(props) {
           <ul className={`${props.isBurgerOpened ? 'header__nav header__nav_visible' : 'header__nav '}`}>
             <li className='header__only-mobile-link'>
               <NavLink to='/'
-                       onClick={mainLinkClick} 
+                       onClick={linkClick} 
                        className='header__linklogged'><span className="header__linklogged-text">Главная</span></NavLink>
             </li>
             <li>
               <NavLink to='/movies' 
+                      onClick={linkClick}
                        activeClassName='header__linklogged-active' 
                        className='header__linklogged'><span className="header__linklogged-text">Фильмы</span></NavLink>
             </li>
             <li>
-              <NavLink to='/saved-movies' 
+              <NavLink to='/saved-movies'
+                       onClick={linkClick} 
                        activeClassName='header__linklogged-active' 
                        className='header__linklogged'><span className="header__linklogged-text">Сохранённые фильмы</span></NavLink>
             </li>
             <li className='header__pofile'>
-              <NavLink to='/profile' 
+              <NavLink to='/profile'
+                       onClick={linkClick} 
                        activeClassName='header__linklogged-active' 
                        className='header__linklogged'>
                 <span className="header__linklogged-text">Аккаунт</span>

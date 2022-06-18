@@ -7,8 +7,9 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 
 function SavedMovies(props) {
-    // console.log('Movies props= ', props);
-    // console.log('Movies props.setFilteredMovies= ', props.setFilteredMovies);
+    // console.log('111 props= ', props);
+    // console.log('111 props.savedUserMovie= ', props.savedUserMovie);
+    // console.log('SavedMovies props.setFilteredMovies= ', props.setFilteredMovies);
 
     // Подписываемся на контекст CurrentUserContext
     const currentUser = React.useContext(CurrentUserContext);
@@ -45,14 +46,16 @@ function SavedMovies(props) {
     //поиск среди сохраненных фильмов
       function handleSearchSubmit(inputValue) {
         localStorage.setItem('savedMoviesSearch', inputValue);
-        // if(filterMovies(savedMoviesList, inputValue, shortMovies).length === 0) {
-        //   setNothingFound(true)
-        // } else {
-        //   setNothingFound(false)
-        //   setFilteredMovies(filterMovies(savedMoviesList, inputValue, shortMovies))
-        //   setShowedMovies(filterMovies(savedMoviesList, inputValue, shortMovies))
-        //   localStorage.setItem('savedMovies', JSON.stringify(savedMoviesList));
-        // }
+        const movies = JSON.parse(localStorage.getItem('savedMovies'));
+
+        if(filterMovies(movies, inputValue, shortMovies).length === 0) {
+          setNothingFound(true)
+        } else {
+          setNothingFound(false)
+          setFilteredMovies(filterMovies(movies, inputValue, shortMovies))
+        //   setShowedMovies(filterMovies(movies, inputValue, shortMovies))
+          localStorage.setItem('savedMovies', JSON.stringify(movies));
+        }
       }
 
 
