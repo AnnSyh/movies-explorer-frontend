@@ -181,144 +181,74 @@ function App() {
   // 'https://api.nomoreparties.co/' + card.image.url, 
   function handleSaveMovie(card) {
 
-    const extantMovie = savedMovies.movies.find((item) => {
-      if (item.movieId === card.id || item.movieId === card.movieId) {
-        return item
-      } else {
-        return savedMovies
-      }
-    })
+    const extantMovie = savedMovies.movies.find((item) => (item.movieId === card.id || item.movieId === card.movieId));
+    if (extantMovie !== 0) {
+      setMessageText('такой фильм у вас уже есть');
+      setPopupOpen(true);
 
-    // console.log('extantMovie.nameRU = ', extantMovie.nameRU);
+    } else {
 
-    // if (savedMovies.movies.length === 0) {
-
-    //   setMessageText('такой фильм у вас уже есть');
-    //   setPopupOpen(true);
-
-    // } else {
-
-    // }
-
-
-    mainApi.saveMovie(
-      card.country || 'unknown',
-      card.director || 'unknown',
-      card.duration || 0,
-      card.year || 'unknown',
-      card.description || 'unknown',
-      'https://api.nomoreparties.co/' + card.image.url || 'unknown',
-      card.trailerLink || 'unknown',
-      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
-      card.id,
-      card.nameRU || 'unknown',
-      card.nameEN || 'unknown'
-    )
-      .then((res) => {
-        setSavedMovies([...savedMovies, res]);
-        localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
-      })
-      .catch((err) => {
-        console.log('saveMovie: catch: err = ', err);
-        // errorsApi(err)
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
-          setMessageText(ERROR_CODE_INTERNAL_ADD);
-          setPopupOpen(true);
-        } else {
-          setMessageText('фильм успешно добавился');
-          setPopupOpen(true);
-        }
-      })
-
-
-  }
-
-  // Функция удаление фильма из сохраненных (значит из mongodb)
-  function handleDeleteMovie(movie) {
-    // if (savedMovies.movies.length === 0) {
-
-    //   setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
-    //   setPopupOpen(true);
-
-    // } else {
-
-      const savedMoviesArr = savedMovies.movies;
-
-      const dellMovie = savedMoviesArr.find((item) => {
-        if (item.movieId === movie.id || item.movieId === movie.movieId) {
-          return item
-        } else {
-          return savedMoviesArr
-        }
-      })
-      // const dellMovie ={};
-
-      // if ({pathname} === '/movies') {
-      //    dellMovie = savedMoviesArr.find( (item) =>  item.movieId === movie.id);
-      //   } else 
-      //   if ({pathname} === '/saved-movies') {
-      //     dellMovie = savedMoviesArr.find((item) =>  item.movieId === movie.movieId );
-      //   }
-
-
-      console.log('dellMovie = ', dellMovie);
-      console.log('dellMovie._id = ', dellMovie._id);
-
-      mainApi.deleteMovie(dellMovie._id)
+      mainApi.saveMovie(
+        card.country || 'unknown',
+        card.director || 'unknown',
+        card.duration || 0,
+        card.year || 'unknown',
+        card.description || 'unknown',
+        'https://api.nomoreparties.co/' + card.image.url || 'unknown',
+        card.trailerLink || 'unknown',
+        'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
+        card.id,
+        card.nameRU || 'unknown',
+        card.nameEN || 'unknown'
+      )
         .then((res) => {
-
-          const newMovie = setSavedMovies.filter((m) => {
-              if (m.movieId === movie.id || m.movieId === movie.movieId){
-              return false
-            } else {
-              return true
-            }
-          })
-
-          // const newMovies =  setSavedMovies(savedMovies.filter((movie) =>
-          //  !(movie._id === dellMovie._id))
-          //  );
-          // localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === dellMovie._id))));
-          setSavedMovies(newMovie);
-          // setSavedMovies(savedMovies.filter((movie) => !(movie._id === res._id)));
-          // localStorage.setItem('savedMovies', JSON.stringify(savedMovies.filter((movie) => !(movie._id === res._id))));
+          setSavedMovies([...savedMovies, res]);
+          localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
         })
         .catch((err) => {
+          console.log('saveMovie: catch: err = ', err);
           // errorsApi(err)
           if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
-            setMessageText(ERROR_CODE_INTERNAL_DEL);
+            setMessageText(ERROR_CODE_INTERNAL_ADD);
             setPopupOpen(true);
           } else {
-            setMessageText('фильм успешно удалился');
+            setMessageText('фильм успешно добавился');
             setPopupOpen(true);
           }
         })
-    // }
+
+    }
 
   }
 
-  // function handleDeleteMovie(movie) {
-  //   console.log('handleDelleteMovie');
+  //удаление фильма
+  function handleDeleteMovie(movie) {
 
-  //   if (savedMovies.movies.length === 0) {
-  //     setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
-  //     setPopupOpen(true);
-  //     // return savedMovies  // как выйти из function handleDeleteMovie ?
-  //   } else {
+    if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
+      setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+      setPopupOpen(true);
+    } 
+    // else if ( savedMovies.movie === undefined ) {
+    //   setMessageText('удаляешь фильм которого нет');
+    //   setPopupOpen(true);
+      
+    // }
+     else {
 
-  //     mainApi
-  //       .deleteMovie(movie.id)
-  //       .then((res) => {
-  //         setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
-  //         localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
-  //       })
-  //       .catch((err) => {
-  //         console.log('deleteMovie: catch: err = ', err);
-  //         errorsApi(err)
-  //       })
-  //   }
+      const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
 
-  // }
+      mainApi
+        .deleteMovie(dellMovie._id)
+        .then((res) => {
+          // setSavedMovies([...savedMovies, res]);
+          setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
+          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+        })
+        .catch((err) => console.log(err));
+
+    }
+
+  };
 
   // Функция получение фильмов и сохранение их 
   function getSavedMovies() {
@@ -389,6 +319,8 @@ function App() {
       })
 
   }, []);
+
+
 
 
   // кнопка Escape

@@ -76,7 +76,10 @@ function Card(props) {
 
     const cross = (
         <>
-            <button className="cards__trash" onClick={handleTrashClick}></button>
+            <button 
+                className="cards__trash" 
+                onClick={handleTrashClick}
+            ></button>
         </>
     )
 
