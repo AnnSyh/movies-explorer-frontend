@@ -258,6 +258,22 @@ function App() {
 
   // ----------useEffect------------------------------------------------------------------
 
+  //получаем массив карточек фильмов
+  useEffect(() => {
+    setIsLoading(true);
+
+    moviesApi
+      .getAllMovies()
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch(err => {
+        setMessageText(`getAllMovies: catch: ` + err);
+        setPopupOpen(true);
+      })
+
+  }, []);
+  
   //получение сохраненных пользователем фильмов
   useEffect(() => {
     if (loggedIn) {
@@ -277,21 +293,6 @@ function App() {
   }, [loggedIn]);
 
 
-  //получаем массив карточек фильмов
-  useEffect(() => {
-    setIsLoading(true);
-
-    moviesApi
-      .getAllMovies()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch(err => {
-        setMessageText(`getAllMovies: catch: ` + err);
-        setPopupOpen(true);
-      })
-
-  }, []);
 
 
 
@@ -367,6 +368,8 @@ function App() {
 
             isLoading={isLoading}
             setFilteredMovies={setFilteredMovies}
+
+            savedMovies={savedMovies}
 
             handlePopupOpen={handlePopupOpen}
 

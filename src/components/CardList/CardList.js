@@ -6,6 +6,7 @@ import Card from '../../components/Card/Card';
 function CardList(props) {
 
     console.log('CardList: props = ', props);
+    // console.log('CardList: props.savedMovies.movies = ', props.savedMovies.movies);
     // console.log('CardList: props.moviesList = ', props.moviesList);
 
 
@@ -80,9 +81,28 @@ function CardList(props) {
         }
     };
 
+    //проверка обьекта на пустоту 
+    function isEmpty(obj) {
+        for(var key in obj)
+        {
+            return false;
+        }
+        return true;
+    }
+
     //проверка сохранения фильма
-    function getSavedMovieCard(savedMoviesList, movie) {
-        return savedMoviesList.find(savedMovie => savedMovie.movieId === movie.id)
+    function getSavedMovieCard(savedMovies, movie) {
+
+        const condition = isEmpty(savedMovies);
+
+        // if (savedMovies !== {}) {
+        if (!condition) {
+
+            // console.log('getSavedMovieCard: return', savedMovies.find(m => m.movieId === movie.id));
+
+            return savedMovies.find(m => m.movieId === movie.id)
+        }
+
     };
 
     // console.log('CardList: showCardList = ', { showCardList });
@@ -105,11 +125,21 @@ function CardList(props) {
 
                                             savedMoviesPage={savedMoviesPage}
 
-                                            pathname={props.pathname}
+                                            // saved={
+                                            //     // props.savedMovies
+                                            //     !isEmpty(props.savedMovies)
+                                            //         ? getSavedMovieCard(props.savedMovies, card)
+                                            //         : false
+                                            // }
 
-                                            {...card}
+
+                                            saved= {false}
+
+                                pathname={props.pathname}
+
+                                {...card}
                                         />
-                                    );
+                                );
                                 })
                                 }
                             </ul>
