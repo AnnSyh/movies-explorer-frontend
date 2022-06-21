@@ -4,11 +4,6 @@ import ProfileImgSrc from '../../images/icon-main.svg';
 
 function NavBar(props) {
 
-  console.log('NavBar: props = ', props);
-
-
-
-
   return (
     <>
       {/* { props.loggedIn  ? <p>залогинены</p> : <p>не залогинены </p>} */}

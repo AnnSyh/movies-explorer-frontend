@@ -19,7 +19,7 @@ function Profile(props) {
 
     const [name, setName] = useState(currentUser.name);
     const [previousName, setPreviousName] = useState(currentUser.name);
-    const [email, setEmail] = React.useState(currentUser.email);
+    const [email, setEmail] = useState(currentUser.email);
     const [previousEmail, setPreviousEmail] = useState(currentUser.email);
     const [isActiveButton, setIsActiveButton] = useState(false); //для активности кнопки Сохранить
 

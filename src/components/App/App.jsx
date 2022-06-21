@@ -63,7 +63,7 @@ function App() {
 
   const { pathname } = useLocation();
 
-  const [messageText, setMessageText] = React.useState('сообщения для ошибок');// сообщения для ошибок
+  const [messageText, setMessageText] = useState('сообщения для ошибок');// сообщения для ошибок
 
   // ------------------------------functions------------------------------------
 
