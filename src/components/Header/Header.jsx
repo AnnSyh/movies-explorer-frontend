@@ -18,6 +18,8 @@ function Header(props) {
     setIsBurgerOpened(!isBurgerOpened);
   }
 
+
+  //это должно работатьдля десктопа без серого закрывающего фона
   //закрываем меню при переходе настр (т.е. при клике по пункту меню)
   function linkClick() {
     setIsBurgerOpened(!isBurgerOpened);

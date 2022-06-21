@@ -12,14 +12,11 @@ import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import ImagePopup from '../ImagePopup/ImagePopup'; //всплывающие картинки
 import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие предупреждения
-import Preloader from '../Preloader/Preloader'; //крутилка
 
-import api from '../../utils/api';
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
-import { // ERROR_CODE_INTERNAL
+import {
   BASE_URL,
   MOVIES_URL,
   ERROR_CODE_INTERNAL_DEL,
@@ -54,22 +51,11 @@ function App() {
   const [savedMovies, setSavedMovies] = useState({}); //сохраняем сюда выбранные фильмы
   const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || null);
 
-  const [isDeleteMoviePopupOpen, setIsDeleteMoviePopupOpen] = useState(false);
-  const [isSaveMoviePopupOpen, setIsSaveMoviePopupOpen] = useState(false);
-
-  const [message, setMessage] = useState('');
-
-  const [movies, setMovies] = useState([]);
-
   const { pathname } = useLocation();
 
   const [messageText, setMessageText] = useState('сообщения для ошибок');// сообщения для ошибок
 
   // ------------------------------functions------------------------------------
-
-  const handleSuccessInfoTooltipOpen = () => {
-    setisSuccessInfoTooltipOpen(true)
-  }
 
   //закрываем все попапы
   const closeAllPopups = () => {
@@ -77,7 +63,8 @@ function App() {
     setPopupOpen(false);
   };
 
-  const handlePopupOpen = () => { //открытие попапа общегосинфой
+  //открытие попапа общего с инфой
+  const handlePopupOpen = () => {
     setPopupOpen(true)
   }
 
@@ -177,10 +164,9 @@ function App() {
   }
 
 
-  // Функция добавление фильма в сохраненные(клик по чекбоксу карточки филима)
+  // Функция добавление фильма в сохраненные(клик по чекбоксу карточки фильма)
   // 'https://api.nomoreparties.co/' + card.image.url, 
   function handleSaveMovie(card) {
-
     // const extantMovie = savedMovies.movies.find((item) => (item.movieId === card.id || item.movieId === card.movieId));
     // console.log('extantMovie = ',extantMovie);
     // if (extantMovie !== 0 || extantMovie === undefined) {
@@ -189,55 +175,44 @@ function App() {
 
     // } else {
 
-      mainApi.saveMovie(
-        card.country || 'unknown',
-        card.director || 'unknown',
-        card.duration || 0,
-        card.year || 'unknown',
-        card.description || 'unknown',
-        'https://api.nomoreparties.co/' + card.image.url || 'unknown',
-        card.trailerLink || 'unknown',
-        'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
-        card.id,
-        card.nameRU || 'unknown',
-        card.nameEN || 'unknown'
-      )
-        .then((res) => {
-          setSavedMovies([...savedMovies, res]);
-          localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
-
-          console.log('savedMovies = ',savedMovies);
-
-        })
-        .catch((err) => {
-          console.log('saveMovie: catch: err = ', err);
-          if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
-            setMessageText(ERROR_CODE_INTERNAL_ADD);
-            setPopupOpen(true);
-          } else {
-            setMessageText('фильм успешно добавился');
-            setPopupOpen(true);
-          }
-        })
-
+    mainApi.saveMovie(
+      card.country || 'unknown',
+      card.director || 'unknown',
+      card.duration || 0,
+      card.year || 'unknown',
+      card.description || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.url || 'unknown',
+      card.trailerLink || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
+      card.id,
+      card.nameRU || 'unknown',
+      card.nameEN || 'unknown'
+    )
+      .then((res) => {
+        setSavedMovies([...savedMovies, res]);
+        localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
+        // должен измениться checkbox на зеленый
+      })
+      .catch((err) => {
+        console.log('saveMovie: catch: err = ', err);
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+          setMessageText(ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        } else {
+          setMessageText('фильм успешно добавился');
+          setPopupOpen(true);
+        }
+      })
     // }
-
   }
 
-  //удаление фильма
+  // Функция удаления фильма
   function handleDeleteMovie(movie) {
-
     if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
       setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
       setPopupOpen(true);
     }
-    // else if ( savedMovies.movie === undefined ) {
-    //   setMessageText('удаляешь фильм которого нет');
-    //   setPopupOpen(true);
-
-    // }
     else {
-
       const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
 
       if (dellMovie === undefined) {
@@ -250,19 +225,13 @@ function App() {
         mainApi
           .deleteMovie(dellMovie._id)
           .then((res) => {
-            // setSavedMovies([...savedMovies, res]);
             setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
             localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
-         
-         console.log('savedMovies = ',savedMovies);
-         
+            // должен измениться checkbox на белый
           })
           .catch((err) => console.log(err));
       }
-
-
     }
-
   };
 
   // Функция получение фильмов и сохранение их 

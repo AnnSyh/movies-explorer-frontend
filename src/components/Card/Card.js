@@ -1,11 +1,14 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import './card.css';
 
 function Card(props) {
 
-    const [location, setLocation] = useState('/');
+    // Подписываемся на контекст CurrentUserContext
+    const currentUser = React.useContext(CurrentUserContext);
+    
+    // const [location, setLocation] = useState('/');
 
     // console.log('Card: props = ', props);
     // console.log('Card: props.pathname = ', props.pathname);
@@ -13,8 +16,6 @@ function Card(props) {
     // console.log('Card: ? props.image = ', 'https://api.nomoreparties.co' + props.image.url);
     // console.log('Card: : "https://api.nomoreparties.co" + props.image.formats.thumbnail.url = ', 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url);
 
-    // Подписываемся на контекст CurrentUserContext
-    const currentUser = React.useContext(CurrentUserContext);
 
     const [saved, setSaved] = useState(false);
 
@@ -46,9 +47,6 @@ function Card(props) {
             props.handleSaveMovie();// добавляется в массив и локалсторидж 
             setSaved(!saved);
         }
-
-       
-
         // // запомним лайкнутую карточку
         // localStorage.setItem('saved', saved);
     }
