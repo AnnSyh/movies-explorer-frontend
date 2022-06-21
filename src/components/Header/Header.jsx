@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import logoSrc from '../../images/logo.svg';
 import burgerMenuSrc from '../../images/burger-menu.svg';
@@ -7,19 +7,15 @@ import './header.css';
 import Navbar from '../NavBar/NavBar';
 
 function Header(props) {
-
   // console.log('Header: props.pathname = ', props.pathname);
 
   const [isBurgerOpened, setIsBurgerOpened] = useState(false);
-  const [location, setLocation] = useState('/');
-
 
   function handleBurgerIconClick() {
     setIsBurgerOpened(!isBurgerOpened);
   }
 
-
-  //это должно работатьдля десктопа без серого закрывающего фона
+  //это должно работать для десктопа без серого закрывающего фона
   //закрываем меню при переходе настр (т.е. при клике по пункту меню)
   function linkClick() {
     setIsBurgerOpened(!isBurgerOpened);
@@ -29,13 +25,11 @@ function Header(props) {
     <>
       <div id='top'></div>
       <header
-        // className='header'
         className={
           props.pathname === '/signup' || props.pathname === '/signin'
             ? 'header header__hidden'
             : 'header'
         }
-
       >
         <div className='header__container'>
           <div className='header__mobile'>
