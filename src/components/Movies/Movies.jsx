@@ -114,10 +114,12 @@ function Movies(props) {
 
     //отображение карточек из локального хранилища
     useEffect(() => {
-        if (localStorage.getItem('movies')) {
+        if (localStorage.getItem('movies') ) {
             const movies = JSON.parse(localStorage.getItem('movies'));
+
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
+
             if (localStorage.getItem('shortMovies') === "true") {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
@@ -127,6 +129,8 @@ function Movies(props) {
             setNothingFound(true)
         }
     }, [currentUser]);
+
+    
 
 
     return (
@@ -166,6 +170,8 @@ function Movies(props) {
 
                                                 handleSaveMovie={props.handleSaveMovie}
                                                 handleDeleteMovie={props.handleDeleteMovie}
+
+                                                pathname={props.pathname}
                                                 
 
                                                 // onSaveClick={onSaveClick}

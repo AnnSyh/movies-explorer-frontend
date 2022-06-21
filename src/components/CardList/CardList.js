@@ -19,6 +19,8 @@ function CardList(props) {
     }
 
 
+
+
     return (
         <section className="movies__section">
             <>

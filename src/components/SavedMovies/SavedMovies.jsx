@@ -101,8 +101,10 @@ function SavedMovies(props) {
         
         if (localStorage.getItem('savedMovies')) {
             const movies = JSON.parse(localStorage.getItem('savedMovies'));
+
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
+            
             if (localStorage.getItem('shortMovies') === "true") {
                 setFilteredMovies(filterShortMovies(movies));
             } else {

@@ -27,25 +27,28 @@ function Card(props) {
 
 //выделение выбранного пользователем фильма
     function handleCheckboxClick() {
-        setSaved(!saved);
-
         if (saved) {
             // if (false) {
             // if(true){
             console.log('if удаление фильма из базы mongodb')
-            console.log('saved = ', saved)
-            localStorage.setItem('saved2', false);
-            console.log('localStorage.getItem(saved2) = ', localStorage.getItem('saved2'))
 
-            props.handleDeleteMovie()
+            localStorage.setItem('saved', false); // нужно для смены класса чекбокса
+            console.log('localStorage.getItem(saved) = ', localStorage.getItem('saved'))
+
+            props.handleDeleteMovie(); // удаляется из массива и локалсториджа 
+            setSaved(!saved);
+
         } else {
             console.log('else добавление фильма в базу mongodb')
-            console.log('saved = ', saved)
-            localStorage.setItem('saved2', true);
-            console.log('localStorage.getItem(saved2) = ', localStorage.getItem('saved2'))
+            localStorage.setItem('saved', true); // нужно для смены класса чекбокса
+            console.log('localStorage.getItem(saved) = ', localStorage.getItem('saved'))
 
-            props.handleSaveMovie()
+            props.handleSaveMovie();// добавляется в массив и локалсторидж 
+            setSaved(!saved);
         }
+
+       
+
         // // запомним лайкнутую карточку
         // localStorage.setItem('saved', saved);
     }
@@ -53,7 +56,7 @@ function Card(props) {
     //-------------useEffects-----------------------------------
     // состояние карточки  лайкнутые/нет
     // useEffect(() => {
-    //     if (localStorage.getItem('saved2') === 'true') {
+    //     if (localStorage.getItem('saved') === 'true') {
     //         setSaved(true);
     //     } else {
     //         setSaved(false);
@@ -65,9 +68,9 @@ function Card(props) {
             <span
                 className={
                     // !saved
-                    !localStorage.getItem('saved2')
-                        ? `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card`
-                        : `${localStorage.getItem("saved2")} checkbox__slider checkbox__slider_card checkbox__slider_green`
+                    !localStorage.getItem('saved')
+                        ? `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card`
+                        : `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card checkbox__slider_green`
                 }
                 onClick={handleCheckboxClick}
             ></span>

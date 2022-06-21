@@ -181,12 +181,13 @@ function App() {
   // 'https://api.nomoreparties.co/' + card.image.url, 
   function handleSaveMovie(card) {
 
-    const extantMovie = savedMovies.movies.find((item) => (item.movieId === card.id || item.movieId === card.movieId));
-    if (extantMovie !== 0) {
-      setMessageText('такой фильм у вас уже есть');
-      setPopupOpen(true);
+    // const extantMovie = savedMovies.movies.find((item) => (item.movieId === card.id || item.movieId === card.movieId));
+    // console.log('extantMovie = ',extantMovie);
+    // if (extantMovie !== 0 || extantMovie === undefined) {
+    //   setMessageText('такой фильм у вас уже есть');
+    //   setPopupOpen(true);
 
-    } else {
+    // } else {
 
       mainApi.saveMovie(
         card.country || 'unknown',
@@ -204,10 +205,12 @@ function App() {
         .then((res) => {
           setSavedMovies([...savedMovies, res]);
           localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
+
+          console.log('savedMovies = ',savedMovies);
+
         })
         .catch((err) => {
           console.log('saveMovie: catch: err = ', err);
-          // errorsApi(err)
           if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
             setMessageText(ERROR_CODE_INTERNAL_ADD);
             setPopupOpen(true);
@@ -217,7 +220,7 @@ function App() {
           }
         })
 
-    }
+    // }
 
   }
 
@@ -227,24 +230,36 @@ function App() {
     if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
       setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
       setPopupOpen(true);
-    } 
+    }
     // else if ( savedMovies.movie === undefined ) {
     //   setMessageText('удаляешь фильм которого нет');
     //   setPopupOpen(true);
-      
+
     // }
-     else {
+    else {
 
       const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
 
-      mainApi
-        .deleteMovie(dellMovie._id)
-        .then((res) => {
-          // setSavedMovies([...savedMovies, res]);
-          setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
-          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
-        })
-        .catch((err) => console.log(err));
+      if (dellMovie === undefined) {
+        setMessageText('удаляешь фильм которого нет в твоем списке');
+        setPopupOpen(true);
+      } else {
+
+        console.log('dellMovie._id = ', dellMovie._id);
+
+        mainApi
+          .deleteMovie(dellMovie._id)
+          .then((res) => {
+            // setSavedMovies([...savedMovies, res]);
+            setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
+            localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+         
+         console.log('savedMovies = ',savedMovies);
+         
+          })
+          .catch((err) => console.log(err));
+      }
+
 
     }
 
@@ -273,17 +288,6 @@ function App() {
 
 
   // ----------useEffect------------------------------------------------------------------
-
-  //   // состояние карточки  лайкнутые/нет
-  //   useEffect(() => {
-  //     if (localStorage.getItem('saved2') === 'true') {
-  //         setSaved(true);
-  //     } else {
-  //         setSaved(false);
-  //     }
-  // }, [currentUser]);
-
-
 
   //получение сохраненных пользователем фильмов
   useEffect(() => {

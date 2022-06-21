@@ -18,10 +18,15 @@ function Header(props) {
     setIsBurgerOpened(!isBurgerOpened);
   }
 
+  //закрываем меню при переходе настр (т.е. при клике по пункту меню)
+  function linkClick() {
+    setIsBurgerOpened(!isBurgerOpened);
+  }
+
   return (
     <>
       <div id='top'></div>
-      <header 
+      <header
         // className='header'
         className={
           props.pathname === '/signup' || props.pathname === '/signin'
@@ -48,6 +53,7 @@ function Header(props) {
           <Navbar
             loggedIn={props.loggedIn}
             isBurgerOpened={isBurgerOpened}
+            linkClick={linkClick}
           />
         </div>
       </header>

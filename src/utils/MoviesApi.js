@@ -9,6 +9,7 @@ class MoviesApi extends Api {
     getAllMovies() {
         return fetch(`${this._serverUrl}/beatfilm-movies`, {
             method: 'GET',
+            header: 'Access-Control-Allow-Origin',
         })
         .then(super._checkResult);
     }
