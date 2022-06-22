@@ -6,10 +6,11 @@ import Card from '../../components/Card/Card';
 function CardList(props) {
 
     // console.log('CardList: props = ', props);
-    // console.log('CardList: props.pathname = ', props.pathname);
+    console.log('CardList: props.pathname = ', props.pathname);
     // console.log('CardList: props.savedMovies = ', props.savedMovies);
     // console.log('CardList: props.savedMovies.movies = ', props.savedMovies.movies);
     // console.log('CardList: props.moviesList = ', props.moviesList);
+
 
 
     const savedMoviesPage = false;
@@ -122,16 +123,14 @@ function CardList(props) {
                                             handleDeleteMovie={() => props.handleDeleteMovie(card)}
                                             savedMoviesPage={savedMoviesPage}
 
-                                            // saved={saved}
-                                            // saved={getSavedMovieCard(props.savedMovies, card)}
-                                            // saved={
-                                            //     // props.savedMovies
-                                            //     props.pathname = '/movies'
-                                            //         ? getSavedMovieCard(props.savedMovies.movies, card)
-                                            //         : false
-                                            // }
+                                            saved={
+                                                // props.savedMovies
+                                                props.pathname === '/movies'
+                                                    ? getSavedMovieCard(props.savedMovies.movies, card)
+                                                    : false
+                                            }
                                             // saved={false}
-                                            // // saved={true}
+                                            // saved={true}
 
                                             pathname={props.pathname}
                                             {...card}

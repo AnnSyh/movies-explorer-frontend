@@ -210,7 +210,9 @@ function App() {
       mainApi
         .deleteMovie(dellMovie._id)
         .then((res) => {
-          setSavedMovies(JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+          setSavedMovies(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
+          // setShowCardList(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
+          setSavedMovies(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
           localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
           // должен измениться checkbox на белый
           setMessageText('фильм успешно удален');
