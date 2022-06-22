@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from 'react';
 import './search-form.css';
-import { useForm, useFormWithValidation } from '../../hooks/useForm';
+import {useFormWithValidation } from '../../hooks/useForm';
 
 function SearchForm(props) {
 
@@ -10,7 +10,6 @@ function SearchForm(props) {
   const [error, setError] = useState();
   // ----------------------------
   const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
-  const [inputSearch, setInputSearch] = useState('');
 
   function clearError() {
     setError(null);
@@ -20,13 +19,9 @@ function SearchForm(props) {
   function handleSubmitForm(e) {
     clearError();
     e.preventDefault();
-    // console.log('handleSubmitForm');
 
     if (isValid) {
-      // console.log('SearchForm (handleSubmitForm): isValid = ', isValid);
-      // добавить сюда поиск и выбор фильмов по ключевому слову 
       props.handleSearchSubmit(values.movie);
-
     } 
 
   }
@@ -48,9 +43,10 @@ function SearchForm(props) {
             required
             name='movie'
             autoComplete='on'
-            minLength='1'
+            minLength='0'
             maxLength='15'
             value={values.movie || props.inputValue}
+            // value={values.movie}
             onChange={handleChangeInput}
           />
           <button
@@ -67,7 +63,7 @@ function SearchForm(props) {
           <span className='search__error'>
             {
               !isValid
-                ? 'Введите ключевое слово: ' + errors.movie
+                ? 'Введите ключевое слово: '
                 : errors.movie
             }
           </span>

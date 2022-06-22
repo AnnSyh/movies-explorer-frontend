@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import './card.css';
 
 function Card(props) {
@@ -8,19 +7,6 @@ function Card(props) {
     // console.log('Card:  props= ', props );
     // console.log('Card:  props.saved = ', props.saved );
 
-    // Подписываемся на контекст CurrentUserContext
-    const currentUser = React.useContext(CurrentUserContext);
-
-    // const [location, setLocation] = useState('/');
-
-    // console.log('Card: props = ', props);
-    // console.log('Card: props.pathname = ', props.pathname);
-    // console.log('Card: ? props.image = ', props.image);
-    // console.log('Card: ? props.image = ', 'https://api.nomoreparties.co' + props.image.url);
-    // console.log('Card: : "https://api.nomoreparties.co" + props.image.formats.thumbnail.url = ', 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url);
-
-
-    const [saved, setSaved] = useState(false);
 
     //cохранение фильма в базу mongodb
     function handleSaveClick() {
@@ -39,23 +25,21 @@ function Card(props) {
 
     //выделение выбранного пользователем фильма
     function handleCheckboxClick() {
-        if (saved) {
+        if (props.saved) {
             // if (false) {
             // if(true){
             console.log('if удаление фильма из базы mongodb')
-            localStorage.setItem('saved', false); // нужно для смены класса чекбокса
 
             // props.handleDeleteMovie(); // удаляется из массива и локалсториджа 
             handleTrashClick(); // удаляется из массива и локалсториджа 
-            setSaved(!saved);
+            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
 
         } else {
             console.log('else добавление фильма в базу mongodb')
-            localStorage.setItem('saved', true); // нужно для смены класса чекбокса
 
             // props.handleSaveMovie();// добавляется в массив и локалсторидж 
             handleSaveClick();// добавляется в массив и локалсторидж 
-            setSaved(!saved);
+            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
         }
         // // запомним лайкнутую карточку
         // localStorage.setItem('saved', saved);
@@ -66,7 +50,7 @@ function Card(props) {
             <span
                 className={
                     // !saved
-                    saved
+                    props.saved
                         ?  `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card checkbox__slider_green`
                         :   `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card`
                 }

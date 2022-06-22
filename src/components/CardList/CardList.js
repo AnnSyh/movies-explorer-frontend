@@ -5,12 +5,13 @@ import Card from '../../components/Card/Card';
 
 function CardList(props) {
 
-    console.log('CardList: props = ', props);
+    // console.log('CardList: props = ', props);
+    // console.log('CardList: props.pathname = ', props.pathname);
+    // console.log('CardList: props.savedMovies = ', props.savedMovies);
     // console.log('CardList: props.savedMovies.movies = ', props.savedMovies.movies);
     // console.log('CardList: props.moviesList = ', props.moviesList);
 
 
-    const onSaveClick = false;  //переключатель чекбокса карточки (на дододелать)
     const savedMoviesPage = false;
 
     const [showCardList, setshowCardList] = useState([]);
@@ -83,29 +84,26 @@ function CardList(props) {
 
     //проверка обьекта на пустоту 
     function isEmpty(obj) {
-        for(var key in obj)
-        {
+        for (var key in obj) {
             return false;
         }
         return true;
     }
 
-    //проверка сохранения фильма
+    // //проверка сохранения фильма
     function getSavedMovieCard(savedMovies, movie) {
 
-        const condition = isEmpty(savedMovies);
+        const isEmptyConst = isEmpty(savedMovies);
+        console.log('isEmpty(savedMovies)', isEmpty(savedMovies));
 
-        // if (savedMovies !== {}) {
-        if (!condition) {
 
-            // console.log('getSavedMovieCard: return', savedMovies.find(m => m.movieId === movie.id));
+        if (!isEmptyConst) {
 
             return savedMovies.find(m => m.movieId === movie.id)
         }
 
-    };
 
-    // console.log('CardList: showCardList = ', { showCardList });
+    };
 
 
     return (
@@ -122,24 +120,23 @@ function CardList(props) {
                                         <Card key={card.id || card._id} // для карточек с ресурса фильмов/mongo сервера
                                             handleSaveMovie={() => props.handleSaveMovie(card)}
                                             handleDeleteMovie={() => props.handleDeleteMovie(card)}
-
                                             savedMoviesPage={savedMoviesPage}
 
+                                            // saved={saved}
+                                            // saved={getSavedMovieCard(props.savedMovies, card)}
                                             // saved={
                                             //     // props.savedMovies
-                                            //     !isEmpty(props.savedMovies)
-                                            //         ? getSavedMovieCard(props.savedMovies, card)
+                                            //     props.pathname = '/movies'
+                                            //         ? getSavedMovieCard(props.savedMovies.movies, card)
                                             //         : false
                                             // }
+                                            // saved={false}
+                                            // // saved={true}
 
-
-                                            saved= {false}
-
-                                pathname={props.pathname}
-
-                                {...card}
+                                            pathname={props.pathname}
+                                            {...card}
                                         />
-                                );
+                                    );
                                 })
                                 }
                             </ul>
@@ -149,20 +146,6 @@ function CardList(props) {
                                     className='btn__else link'
                                     onClick={handleClickMoreCards} >Ещё</button>
                                 : ''}
-
-
-                            {/* <ul className="cards__list list-template-place">
-                                {showCardList.map((movie) => (
-                                    <Card
-                                        // saved={getSavedMovieCard(savedMoviesList, movie)}
-                                        key={movie.id || movie._id}
-                                        movie={movie}
-                                        // onSaveClick={onSaveClick}
-                                        // onDeleteClick={onDeleteClick}
-                                        // savedMoviesPage={savedMoviesPage}
-                                    />
-                                ))}
-                            </ul> */}
 
                         </>
                 }

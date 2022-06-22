@@ -75,7 +75,6 @@ function App() {
 
   // авторизация пользователя (логин)
   function handleLogin(username, password) {
-    // console.log('handleLogin: ');
     auth
       .authorize(username, password)
       .then((data) => {
@@ -92,7 +91,6 @@ function App() {
 
   // регистрация пользователя 
   function handleRegister(email, password) {
-    // console.log('handleRegister: ');
     auth
       .register(email, password)
       .then((res) => {
@@ -138,10 +136,8 @@ function App() {
 
   // Функция обновления пользователя 
   function handleUpdateUser(user) {
-    console.log('Функция обновления пользователя');
     const { name, email } = user
     setIsSubmitting(true);
-    // buttonText = "Сохраняется...";
     mainApi
       .updateUserInfo(name, email)
       .then((userData) => {
@@ -158,7 +154,6 @@ function App() {
       .finally(
         () => {
           setIsSubmitting(false);
-          // buttonText = "Сохранить";
         }
       );
   }
@@ -188,18 +183,11 @@ function App() {
       card.nameRU || 'unknown',
       card.nameEN || 'unknown'
     )
-      .then((res) => {
-        setSavedMovies([...savedMovies, res]);
-        localStorage.setItem('savedMovies', JSON.stringify([...savedMovies, res]));
-        // должен измениться checkbox на зеленый
-      })
+      .then((res) => { setSavedMovies([res, ...savedMovies]) })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
-          setPopupOpen(true);
-        } else {
-          setMessageText('фильм успешно добавился');
           setPopupOpen(true);
         }
       })
@@ -208,30 +196,31 @@ function App() {
 
   // Функция удаления фильма
   function handleDeleteMovie(movie) {
-    if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
-      setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+    // if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
+    //   setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
+    //   setPopupOpen(true);
+    // }
+    // else {
+    const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
+
+    if (dellMovie === undefined) {
+      setMessageText('удаляешь фильм которого нет в твоем списке');
       setPopupOpen(true);
+    } else {
+      // console.log('dellMovie._id = ', dellMovie._id);
+
+      mainApi
+        .deleteMovie(dellMovie._id)
+        .then((res) => {
+          setSavedMovies(JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+          // должен измениться checkbox на белый
+          setMessageText('фильм успешно удален');
+          setPopupOpen(true);
+        })
+        .catch((err) => console.log(err));
     }
-    else {
-      const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
-
-      if (dellMovie === undefined) {
-        setMessageText('удаляешь фильм которого нет в твоем списке');
-        setPopupOpen(true);
-      } else {
-
-        console.log('dellMovie._id = ', dellMovie._id);
-
-        mainApi
-          .deleteMovie(dellMovie._id)
-          .then((res) => {
-            setSavedMovies(savedMovies.movies.filter((movie) => !(movie.id === res._id)));
-            localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
-            // должен измениться checkbox на белый
-          })
-          .catch((err) => console.log(err));
-      }
-    }
+    // }
   };
 
   // Функция получение фильмов и сохранение их 
@@ -254,8 +243,6 @@ function App() {
       })
   }
 
-
-
   // ----------useEffect------------------------------------------------------------------
 
   //получаем массив карточек фильмов
@@ -273,7 +260,7 @@ function App() {
       })
 
   }, []);
-  
+
   //получение сохраненных пользователем фильмов
   useEffect(() => {
     if (loggedIn) {
@@ -292,11 +279,6 @@ function App() {
     }
   }, [loggedIn]);
 
-
-
-
-
-
   // кнопка Escape
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -311,7 +293,6 @@ function App() {
 
   // Регистрация
   // Отправляем запрос в API и устанавливаем текущего юзера
-
   useEffect(() => tokenCheck(), [])
 
   useEffect(() => {
@@ -356,23 +337,17 @@ function App() {
             <Footer />
           </Route>
 
-
           <ProtectedRoute path='/movies'
             loggedIn={loggedIn}
             preloading={preloading}
             cards={cards}
             pathname={pathname}
-
+            isLoading={isLoading}
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
-
-            isLoading={isLoading}
-            setFilteredMovies={setFilteredMovies}
-
             savedMovies={savedMovies}
-
+            setFilteredMovies={setFilteredMovies}
             handlePopupOpen={handlePopupOpen}
-
             component={Movies}
           >
             <Footer />
@@ -380,18 +355,14 @@ function App() {
 
           <ProtectedRoute path='/saved-movies'
             loggedIn={loggedIn}
+            preloading={preloading}
             cards={cards}
             pathname={pathname}
-
             isLoading={isLoading}
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
-
-            savedMovies={savedMovies}
             setFilteredMovies={setFilteredMovies}
-
             handlePopupOpen={handlePopupOpen}
-
             component={SavedMovies}
           >
             <Footer />
@@ -406,22 +377,20 @@ function App() {
           >
           </ProtectedRoute>
 
-
-
           <Route path='*'>
             <PageNotFound />
           </Route>
 
         </Switch>
 
-        {      /* попап с ошибкой */}
+        {/* попап с ошибкой */}
         <InfoTooltip
           message={messageText}
           isOpen={popupOpen}
           onClose={closeAllPopups}
         />
 
-        {/* /попап для успешной регистрации */}
+        {/* попап для успешной регистрации */}
         <InfoTooltip
           onClose={closeAllPopups}
           isOpen={isSuccessInfoTooltipOpen}

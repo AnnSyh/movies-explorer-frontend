@@ -1,10 +1,10 @@
 // import React from 'react';
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 import './profile.css';
 import '../Link/link.css';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useForm, useFormWithValidation } from '../../hooks/useForm';
+import { useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
 
@@ -23,7 +23,42 @@ function Profile(props) {
     const [previousEmail, setPreviousEmail] = useState(currentUser.email);
     const [isActiveButton, setIsActiveButton] = useState(false); //для активности кнопки Сохранить
 
+    function handleEditButton() {
+        setIsEditModeOn(true);
+    }
 
+    function handleSubmitButtonClick(e) {
+        e.preventDefault();
+        setIsEditModeOn(false);
+
+        if (isValid) {
+            console.log('handleSubmitButtonClick: isValid = ', isValid);
+            props.onUpdateUser(values);
+            setIsUpdateUser(true);
+        }
+    }
+
+    //ввод данных, сверка со старыми
+    function handleUserName(evt) {
+        const value = evt.target.value;
+        setName(value);
+        if (value !== previousName) {
+            setIsActiveButton(true);
+        } else {
+            setIsActiveButton(false);
+        }
+    }
+
+    //ввод данных, сверка со старыми
+    function handleUserEmail(evt) {
+        const value = evt.target.value;
+        setEmail(value);
+        if (value !== previousEmail) {
+            setIsActiveButton(true);
+        } else {
+            setIsActiveButton(false);
+        }
+    }
 
     //передаем введенный в поля текст
     useEffect(() => {
@@ -48,73 +83,20 @@ function Profile(props) {
     </>
     const profileButton = <>
         <span className='profile__error'>
-            `${props.setMessage}`
-            При обновлении профиля произошла ошибка.
+            {props.setMessage}
         </span>
-
-        <p>isActiveButton = `${isActiveButton}`</p>
 
         <button onClick={handleEditButton}
             type='submit'
             className={
                 !isValid
-                    ? 'profile__btn'
-                    : 'profile__btn link profile__btn-valid'
+                    ? `profile__btn`
+                    : `profile__btn link profile__btn-valid`
             }
             disabled={!isValid}
-        // disabled={!isActiveButton}
         >Сохранить
         </button>
     </>
-
-    function handleEditButton() {
-        setIsEditModeOn(true);
-
-        console.log('isActiveButton = ', isActiveButton);
-
-
-    }
-
-    function handleSubmitButtonClick(e) {
-        e.preventDefault();
-        setIsEditModeOn(false);
-
-        console.log('isActiveButton = ', isActiveButton);
-
-        if (isValid) {
-            console.log('handleSubmitButtonClick: isValid = ', isValid);
-            props.onUpdateUser(values);
-            setIsUpdateUser(true);
-        }
-
-    }
-
-
-    //ввод данных, сверка со старыми
-    function handleUserName(evt) {
-
-        console.log('isActiveButton = ', isActiveButton);
-
-        const value = evt.target.value;
-        setName(value);
-        if (value !== previousName) {
-            setIsActiveButton(true);
-        } else {
-            setIsActiveButton(false);
-        }
-    }
-
-    //ввод данных, сверка со старыми
-    function handleUserEmail(evt) {
-        const value = evt.target.value;
-        setEmail(value);
-        if (value !== previousEmail) {
-            setIsActiveButton(true);
-        } else {
-            setIsActiveButton(false);
-        }
-    }
-
 
     return (
         <>
@@ -144,8 +126,7 @@ function Profile(props) {
                                     maxLength='15'
                                     value={values.name || ''}
                                     disabled={!isEditModeOn}
-                                    onChange={handleChangeInput}
-                                    // onChange={handleChangeInput && handleUserName}
+                                    onChange={handleChangeInput || handleUserName}
                                 />
                             </label>
                             <span className='profile__error'>{errors.name}</span>
@@ -161,8 +142,7 @@ function Profile(props) {
                                     minLength='2'
                                     value={values.email || ''}
                                     disabled={!isEditModeOn}
-                                    onChange={handleChangeInput}
-                                    // onChange={handleChangeInput && handleUserEmail}
+                                    onChange={handleChangeInput || handleUserEmail}
                                 />
                             </label>
                             <span className='profile__error'>{errors.email}</span>
@@ -170,7 +150,7 @@ function Profile(props) {
 
                         <div className='profile__links'>
                             <p className={
-                                isUpdateUser || !isEditModeOn
+                                isUpdateUser && !isEditModeOn
                                     ? 'profile__message '
                                     : 'profile__message profile__message_disabled'
                             }

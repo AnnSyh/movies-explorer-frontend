@@ -70,7 +70,7 @@ function Movies(props) {
             .finally(() => setIsDataLoading(false));
     }
 
-    // установка чекбокса
+    // установка чекбокса для короткометражек
     function handleShortFilms() {
         setShortMovies(!shortMovies);
         if (!shortMovies) {
@@ -88,11 +88,6 @@ function Movies(props) {
         // запомним выбранный чекбокс
         localStorage.setItem('shortMovies', !shortMovies);
     }
-
-    // //кнопка more
-    // function handleCardElse(){
-    //     console.log('handleCardElse');
-    // }
 
     //-------------useEffects-----------------------------------
 
@@ -114,7 +109,7 @@ function Movies(props) {
 
     //отображение карточек из локального хранилища
     useEffect(() => {
-        if (localStorage.getItem('movies') ) {
+        if (localStorage.getItem('movies')) {
             const movies = JSON.parse(localStorage.getItem('movies'));
 
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
@@ -130,7 +125,7 @@ function Movies(props) {
         }
     }, [currentUser]);
 
-    
+
 
 
     return (
@@ -147,8 +142,6 @@ function Movies(props) {
                         shortMovies={shortMovies}
                     />
                 </section>
-
-
 
                 <section className='section content__section'>
                     <div className='list-template-inner'>
@@ -167,53 +160,17 @@ function Movies(props) {
                                             <CardList
                                                 nothingFound={nothingFound}
                                                 moviesList={filteredMovies}
-
                                                 handleSaveMovie={props.handleSaveMovie}
                                                 handleDeleteMovie={props.handleDeleteMovie}
-
                                                 pathname={props.pathname}
-
                                                 savedMovies={props.savedMovies}
-                                                
-
-                                                // onSaveClick={onSaveClick}
-                                                // onDeleteClick={onDeleteClick}
-                                                // savedMoviesList={savedMoviesList}
-
-                                                savedMoviesPage={false}
                                             >
                                             </CardList>
-
-                                            {/* <ul className='cards__list list-template-place'>
-                                                {props.cards.map((card) => {
-                                                    return (
-                                                        <Card key={card.id} // для карточек с ресурса фильмов
-                                                            // handleCardClick={() => props.handleCardClick(card)}
-                                                            handleSaveMovie={() => props.handleSaveMovie(card)}
-                                                            handleDeleteMovie={() => props.handleDeleteMovie(card)}
-
-                                                            // handleCardLike={() => props.handleCardLike(card)}
-                                                            {...card}
-                                                            savedCard={props.savedCard}
-                                                        />
-                                                    );
-                                                })
-                                                }
-                                            </ul> */}
-                                            {/* <button
-                                                className='btn__else link'
-                                            onClick={handleCardElse}
-                                            >Еще</button> */}
 
                                         </>
                                     }
                                 </>
                         }
-
-
-
-
-
 
                     </div>
                 </section>

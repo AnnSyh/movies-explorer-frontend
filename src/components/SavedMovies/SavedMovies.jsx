@@ -19,10 +19,6 @@ function SavedMovies(props) {
     const [filteredMovies, setFilteredMovies] = useState([]);
     const [initialMovies, setInitialMovies] = useState([])
     const [nothingFound, setNothingFound] = useState(true);
-    const [isDataLoading, setIsDataLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
-
-
 
     // ------------functions-----------------
     //фильтр по ключевому слову
@@ -59,7 +55,7 @@ function SavedMovies(props) {
       }
 
 
-    // установка чекбокса
+    // установка чекбокса для короткометражек
     function handleShortFilms() {
         setShortMovies(!shortMovies);
         if (!shortMovies) {
@@ -87,7 +83,7 @@ function SavedMovies(props) {
         }
     }, []);
 
-    //состояние тумблера в локальном хранилище
+    //состояние чекбокса в локальном хранилище
     useEffect(() => {
         if (localStorage.getItem('shortMovies') === "true") {
             setShortMovies(true);
@@ -104,7 +100,7 @@ function SavedMovies(props) {
 
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
-            
+
             if (localStorage.getItem('shortMovies') === "true") {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
