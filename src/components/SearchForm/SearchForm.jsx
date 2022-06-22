@@ -9,7 +9,7 @@ function SearchForm(props) {
 
   const [error, setError] = useState();
   // ----------------------------
-  const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
+  const { values, handleChangeInput, isValid} = useFormWithValidation()  // хук валидации полей формы
 
   function clearError() {
     setError(null);
@@ -23,7 +23,6 @@ function SearchForm(props) {
     if (isValid) {
       props.handleSearchSubmit(values.movie);
     } 
-
   }
 
 
@@ -37,18 +36,23 @@ function SearchForm(props) {
           onSubmit={handleSubmitForm}
         >
           <input
-            placeholder='Фильм'
             className='search__input'
-            type='text'
-            required
             name='movie'
-            autoComplete='on'
-            minLength='0'
-            maxLength='15'
-            value={values.movie || props.inputValue}
-            // value={values.movie}
+            type='text'
+            placeholder='Фильм'
+            autoComplete='off'
+            // value={values.movie || props.inputValue}
+            value={values.movie || ''}
             onChange={handleChangeInput}
+            required
           />
+            <span className='search__error'>
+              {
+              !isValid
+                ? 'Нужно ввести ключевое слово.'
+                : ''
+            }
+              </span>
           <button
             type='submit'
             className={
@@ -57,16 +61,8 @@ function SearchForm(props) {
                 : 'search__button link search__button-valid'
             }
             disabled={!isValid}
-          >
-            Поиск
+          >Поиск
           </button>
-          <span className='search__error'>
-            {
-              !isValid
-                ? 'Введите ключевое слово: '
-                : errors.movie
-            }
-          </span>
         </form>
       </div>
       <div className='search__container'>

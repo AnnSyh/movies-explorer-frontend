@@ -28,7 +28,6 @@ function Auth(props) {
           noValidate
           className={props.authFormStyle}
           onSubmit={props.onSubmit}
-
         >
           <fieldset className='auth__fieldset'>
             {props.children}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -17,9 +17,6 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие �
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import {
-  BASE_URL,
-  MOVIES_URL,
-  ERROR_CODE_INTERNAL_DEL,
   ERROR_CODE_INTERNAL_ADD
 
 } from "../../utils/config";
@@ -55,6 +52,7 @@ function App() {
 
   const [messageText, setMessageText] = useState('сообщения для ошибок');// сообщения для ошибок
 
+  const footerEndpoints = ['/movies', '/saved-movies', '/'];
   // ------------------------------functions------------------------------------
 
   //закрываем все попапы
@@ -334,7 +332,6 @@ function App() {
 
           <Route exact path='/' >
             <Main />
-            <Footer />
           </Route>
 
           <ProtectedRoute path='/movies'
@@ -350,7 +347,6 @@ function App() {
             handlePopupOpen={handlePopupOpen}
             component={Movies}
           >
-            <Footer />
           </ProtectedRoute>
 
           <ProtectedRoute path='/saved-movies'
@@ -365,7 +361,6 @@ function App() {
             handlePopupOpen={handlePopupOpen}
             component={SavedMovies}
           >
-            <Footer />
           </ProtectedRoute>
 
           <ProtectedRoute path='/profile'
@@ -382,6 +377,9 @@ function App() {
           </Route>
 
         </Switch>
+        <Route exact path={footerEndpoints}>
+            <Footer />
+          </Route>
 
         {/* попап с ошибкой */}
         <InfoTooltip

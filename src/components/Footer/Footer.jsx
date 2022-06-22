@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import ArrowTop from '../ArrowTop/ArrowTop';
 import './footer.css';
 
