@@ -6,8 +6,8 @@ import Card from '../../components/Card/Card';
 function CardList(props) {
 
     // console.log('CardList: props = ', props);
-    console.log('CardList: props.pathname = ', props.pathname);
-    // console.log('CardList: props.savedMovies = ', props.savedMovies);
+    // console.log('CardList: props.pathname = ', props.pathname);
+    console.log('CardList: props.savedMovies = ', props.savedMovies);
     // console.log('CardList: props.savedMovies.movies = ', props.savedMovies.movies);
     // console.log('CardList: props.moviesList = ', props.moviesList);
 
@@ -15,7 +15,7 @@ function CardList(props) {
 
     const savedMoviesPage = false;
 
-    const [showCardList, setshowCardList] = useState([]);
+    const [showCardList, setShowCardList] = useState([]);
     const [cardsShowDetails, setCardsShowDetails] = useState({ total: 12, extra: 4 });
 
     const [isMount, setIsMount] = useState(true);
@@ -66,7 +66,7 @@ function CardList(props) {
     useEffect(() => {
         if (props.moviesList.length) {
             const res = props.moviesList.filter((item, i) => i < cardsShowDetails.total);
-            setshowCardList(res);
+            setShowCardList(res);
         }
     }, [props.moviesList, savedMoviesPage, cardsShowDetails.total]);
 
@@ -79,7 +79,7 @@ function CardList(props) {
 
         if (additional > 0) {
             const newCards = props.moviesList.slice(start, end);
-            setshowCardList([...showCardList, ...newCards]);
+            setShowCardList([...showCardList, ...newCards]);
         }
     };
 
@@ -93,17 +93,11 @@ function CardList(props) {
 
     // //проверка сохранения фильма
     function getSavedMovieCard(savedMovies, movie) {
-
         const isEmptyConst = isEmpty(savedMovies);
         console.log('isEmpty(savedMovies)', isEmpty(savedMovies));
-
-
         if (!isEmptyConst) {
-
             return savedMovies.find(m => m.movieId === movie.id)
         }
-
-
     };
 
 
@@ -124,13 +118,14 @@ function CardList(props) {
                                             savedMoviesPage={savedMoviesPage}
 
                                             saved={
-                                                // props.savedMovies
                                                 props.pathname === '/movies'
-                                                    ? getSavedMovieCard(props.savedMovies.movies, card)
+                                                    ? getSavedMovieCard(props.savedMovies, card)
                                                     : false
                                             }
                                             // saved={false}
                                             // saved={true}
+
+                                            showCardList={showCardList}
 
                                             pathname={props.pathname}
                                             {...card}

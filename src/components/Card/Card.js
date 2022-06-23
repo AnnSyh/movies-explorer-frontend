@@ -5,6 +5,7 @@ import './card.css';
 function Card(props) {
 
     // console.log('Card:  props= ', props );
+    console.log('Card:  props.showCardList= ', props.showCardList );
     // console.log('Card:  props.saved = ', props.saved );
 
 
@@ -35,11 +36,13 @@ function Card(props) {
             localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
 
         } else {
+            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
+            // props.saved = localStorage.getItem('saved', !props.saved);
+
             console.log('else добавление фильма в базу mongodb')
 
             // props.handleSaveMovie();// добавляется в массив и локалсторидж 
             handleSaveClick();// добавляется в массив и локалсторидж 
-            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
         }
         // // запомним лайкнутую карточку
         // localStorage.setItem('saved', saved);

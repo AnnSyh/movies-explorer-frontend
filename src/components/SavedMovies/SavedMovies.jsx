@@ -85,7 +85,7 @@ function SavedMovies(props) {
 
     //состояние чекбокса в локальном хранилище
     useEffect(() => {
-        if (localStorage.getItem('shortMovies') === "true") {
+        if (localStorage.getItem('shortMovies') === 'true') {
             setShortMovies(true);
         } else {
             setShortMovies(false);
@@ -101,7 +101,7 @@ function SavedMovies(props) {
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
 
-            if (localStorage.getItem('shortMovies') === "true") {
+            if (localStorage.getItem('shortMovies') === 'true') {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
                 setFilteredMovies(movies);

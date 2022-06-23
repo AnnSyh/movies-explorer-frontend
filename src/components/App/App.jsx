@@ -27,6 +27,8 @@ import * as auth from '../../utils/auth';
 
 function App() {
 
+  // const [showCardList, setShowCardList] = useState([]);//для CardList.js
+
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false)//открытие попапа общего
@@ -45,7 +47,9 @@ function App() {
 
   const [preloading, setPreloading] = useState(false); // крутилка
 
-  const [savedMovies, setSavedMovies] = useState({}); //сохраняем сюда выбранные фильмы
+  const [savedMovies, setSavedMovies] = useState([]); //сохраняем сюда выбранные фильмы
+console.log('111 savedMovies = ', savedMovies);
+
   const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || null);
 
   const { pathname } = useLocation();
@@ -157,6 +161,7 @@ function App() {
   }
 
 
+
   // Функция добавление фильма в сохраненные(клик по чекбоксу карточки фильма)
   // 'https://api.nomoreparties.co/' + card.image.url, 
   function handleSaveMovie(card) {
@@ -181,7 +186,9 @@ function App() {
       card.nameRU || 'unknown',
       card.nameEN || 'unknown'
     )
-      .then((res) => { setSavedMovies([res, ...savedMovies]) })
+      .then((res) => { 
+        setSavedMovies([res, ...savedMovies]); 
+      })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
@@ -194,34 +201,57 @@ function App() {
 
   // Функция удаления фильма
   function handleDeleteMovie(movie) {
-    // if (savedMovies.movies.length === 0 || savedMovies.length === 0) {
-    //   setMessageText('не откуда удалить фильм т.к. у вас нет сохраненных фильмов!!!');
-    //   setPopupOpen(true);
-    // }
-    // else {
-    const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
-
-    if (dellMovie === undefined) {
-      setMessageText('удаляешь фильм которого нет в твоем списке');
-      setPopupOpen(true);
-    } else {
-      // console.log('dellMovie._id = ', dellMovie._id);
-
-      mainApi
-        .deleteMovie(dellMovie._id)
-        .then((res) => {
-          setSavedMovies(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
-          // setShowCardList(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
-          setSavedMovies(savedMovies.movies.filter((movie) => !(movie._id === res._id)));
-          localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
-          // должен измениться checkbox на белый
-          setMessageText('фильм успешно удален');
-          setPopupOpen(true);
+    // const savedMovie = savedMovies.movies.find((item) => {  //*** */
+    const savedMovie = savedMovies.find((item) => {
+      if (item.movieId === movie.id || item.movieId === movie.movieId) {
+        return item
+      } else {
+        return savedMovies
+      }
+    })
+    mainApi.deleteMovie(savedMovie._id)
+      .then(() => {
+        // const newMoviesList = savedMovies.movies.filter((m) => { //*** */
+        const newMoviesList = savedMovies.filter((m) => {
+          if (movie.id === m.movieId || movie.movieId === m.movieId) {
+            return false
+          } else {
+            return true
+          }
         })
-        .catch((err) => console.log(err));
-    }
-    // }
+        setSavedMovies(newMoviesList);
+        // должен измениться checkbox на белый
+      })
+      .catch((err) => {
+        console.log('saveMovie: catch: err = ', err);
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+          setMessageText(ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        }
+      });
   };
+  // function handleDeleteMovie(movie) {
+ 
+  //   const dellMovie = savedMovies.movies.find((item) => (item.movieId === movie.id || item.movieId === movie.movieId));
+
+  //     mainApi
+  //       .deleteMovie(dellMovie._id)
+  //       .then((res) => {
+
+  //         const newMoviesList = savedMovies.movies.filter((movie) => !(movie._id === res._id));
+
+  //         setSavedMovies(newMoviesList);
+  //         localStorage.setItem('savedMovies', JSON.stringify(newMoviesList));
+
+
+  //         // setShowCardList(savedMovies.movies.filter((movie) => !(movie._id === res._id)));;//для CardList.js
+  //         // localStorage.setItem('savedMovies', JSON.stringify(savedMovies.movies.filter((movie) => !(movie.id === res._id))));
+  //         // должен измениться checkbox на белый
+  //         setMessageText('фильм успешно удален');
+  //         setPopupOpen(true);
+  //       })
+  //       .catch((err) => console.log(err));
+  // };
 
   // Функция получение фильмов и сохранение их 
   function getSavedMovies() {
@@ -261,23 +291,23 @@ function App() {
 
   }, []);
 
-  //получение сохраненных пользователем фильмов
-  useEffect(() => {
-    if (loggedIn) {
-      mainApi
-        .getSavedMovies()
-        .then((data) => {
-          console.log('111 SavedUserMovies data = ', data)
-          console.log('111 SavedUserMovies data.movies = ', data.movies)
-          setSavedMovies(data);
-          localStorage.setItem('savedMovies', JSON.stringify(data.movies));
-        })
-        .catch(err => {
-          setMessageText(`getSavedMovies: catch: ` + err);
-          setPopupOpen(true);
-        })
-    }
-  }, [loggedIn]);
+    //получение сохраненных пользователем фильмов
+    useEffect(() => {
+      if (loggedIn) {
+        mainApi
+          .getSavedMovies()
+          .then((data) => {
+            setSavedMovies(data.movies); //*** */
+            // setSavedMovies(data);
+            localStorage.setItem('savedMovies', JSON.stringify(data.movies));
+          })
+          .catch(err => {
+            setMessageText(`getSavedMovies: catch: ` + err);
+            setPopupOpen(true);
+          })
+      }
+    }, [loggedIn]);
+  
 
   // кнопка Escape
   useEffect(() => {
@@ -310,6 +340,10 @@ function App() {
         setPopupOpen(true);
       });
   }, [loggedIn]);
+
+
+// ------------------------------
+
 
 
   return (
@@ -348,6 +382,8 @@ function App() {
             setFilteredMovies={setFilteredMovies}
             handlePopupOpen={handlePopupOpen}
             component={Movies}
+
+            // showCardList={showCardList}
           >
           </ProtectedRoute>
 
@@ -362,6 +398,8 @@ function App() {
             setFilteredMovies={setFilteredMovies}
             handlePopupOpen={handlePopupOpen}
             component={SavedMovies}
+
+            // showCardList={showCardList}
           >
           </ProtectedRoute>
 

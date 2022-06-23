@@ -164,6 +164,8 @@ function Movies(props) {
                                                 handleDeleteMovie={props.handleDeleteMovie}
                                                 pathname={props.pathname}
                                                 savedMovies={props.savedMovies}
+
+                                                // showCardList={props.showCardList}
                                             >
                                             </CardList>
 
