@@ -5,7 +5,6 @@ import './card.css';
 function Card(props) {
 
     // console.log('Card:  props= ', props );
-    console.log('Card:  props.showCardList= ', props.showCardList );
     // console.log('Card:  props.saved = ', props.saved );
 
 
@@ -26,12 +25,9 @@ function Card(props) {
 
     //выделение выбранного пользователем фильма
     function handleCheckboxClick() {
-        if (props.saved) {
-            // if (false) {
-            // if(true){
+        if (props.saved) {  // if(true)
             console.log('if удаление фильма из базы mongodb')
 
-            // props.handleDeleteMovie(); // удаляется из массива и локалсториджа 
             handleTrashClick(); // удаляется из массива и локалсториджа 
             localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
 
@@ -80,6 +76,7 @@ function Card(props) {
 
                     <img className='cards__img'
                         src={
+                            // props.savedMoviesPage
                             props.pathname === '/saved-movies'
                                 ? props.image
                                 : 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url
@@ -92,6 +89,7 @@ function Card(props) {
                 <div className='cards__tex-row'>
                     <h2 className='cards__title text-overflow'>{props.nameRU}</h2>
                     {
+                        // savedMoviesPage
                         props.pathname === '/saved-movies'
                             ? cross
                             : label

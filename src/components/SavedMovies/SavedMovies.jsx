@@ -7,7 +7,6 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 
 function SavedMovies(props) {
-    // console.log('111 props= ', props);
     // console.log('111 props.savedUserMovie= ', props.savedUserMovie);
     // console.log('SavedMovies props.setFilteredMovies= ', props.setFilteredMovies);
 
@@ -40,19 +39,18 @@ function SavedMovies(props) {
     };
 
     //поиск среди сохраненных фильмов
-      function handleSearchSubmit(inputValue) {
+    function handleSearchSubmit(inputValue) {
         localStorage.setItem('savedMoviesSearch', inputValue);
         const movies = JSON.parse(localStorage.getItem('savedMovies'));
 
-        if(filterMovies(movies, inputValue, shortMovies).length === 0) {
-          setNothingFound(true)
+        if (filterMovies(movies, inputValue, shortMovies).length === 0) {
+            setNothingFound(true)
         } else {
-          setNothingFound(false)
-          setFilteredMovies(filterMovies(movies, inputValue, shortMovies))
-        //   setShowedMovies(filterMovies(movies, inputValue, shortMovies))
-          localStorage.setItem('savedMovies', JSON.stringify(movies));
+            setNothingFound(false)
+            setFilteredMovies(filterMovies(movies, inputValue, shortMovies))
+            localStorage.setItem('savedMovies', JSON.stringify(movies));
         }
-      }
+    }
 
 
     // установка чекбокса для короткометражек
@@ -94,7 +92,7 @@ function SavedMovies(props) {
 
     //отображение карточек из локального хранилища
     useEffect(() => {
-        
+
         if (localStorage.getItem('savedMovies')) {
             const movies = JSON.parse(localStorage.getItem('savedMovies'));
 
@@ -110,7 +108,6 @@ function SavedMovies(props) {
             setNothingFound(true)
         }
     }, [currentUser]);
-
 
 
     return (
@@ -133,10 +130,10 @@ function SavedMovies(props) {
                         <CardList
                             nothingFound={nothingFound}
                             moviesList={filteredMovies}
-                            pathname={props.pathname}
-
                             handleSaveMovie={props.handleSaveMovie}
                             handleDeleteMovie={props.handleDeleteMovie}
+                            pathname={props.pathname}
+
                         >
                         </CardList>
                     </div>
