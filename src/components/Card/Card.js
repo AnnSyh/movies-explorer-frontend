@@ -2,8 +2,8 @@ import React from 'react';
 import './card.css';
 
 function Card(props) {
-    console.log('Card:  props = ', props );
-    console.log('Card:  props.saved = ', props.saved );
+    // console.log('Card:  props = ', props );
+    // console.log('Card:  props.saved = ', props.saved );
 
     //cохранение фильма в базу mongodb
     function handleSaveClick() {
