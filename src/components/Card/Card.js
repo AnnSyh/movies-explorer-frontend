@@ -6,6 +6,7 @@ function Card(props) {
 
     // console.log('Card:  props= ', props );
     // console.log('Card:  props.saved = ', props.saved );
+    // console.log('Card:  props.savedMoviesPage = ', props.savedMoviesPage );
 
 
     //cохранение фильма в базу mongodb
@@ -66,8 +67,6 @@ function Card(props) {
             ></button>
         </>
     )
-
-
 
     return (
         <li className='cards__item'>

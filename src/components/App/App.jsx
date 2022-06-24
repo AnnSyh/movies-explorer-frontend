@@ -17,8 +17,8 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip'; //всплывающие �
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import {
-  ERROR_CODE_INTERNAL_ADD
-
+  ERROR_CODE_INTERNAL_ADD,
+  ERROR_CODE_INTERNAL_DEL
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -218,7 +218,7 @@ function App() {
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
-          setMessageText(ERROR_CODE_INTERNAL_ADD);
+          setMessageText(ERROR_CODE_INTERNAL_DEL);
           setPopupOpen(true);
         }
       });

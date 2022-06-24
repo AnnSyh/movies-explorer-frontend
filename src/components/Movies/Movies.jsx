@@ -10,7 +10,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function Movies(props) {
     // console.log('Movies props= ', props);
-    // console.log('Movies props.setFilteredMovies= ', props.setFilteredMovies);
+    // console.log('Movies props.savedMovies === ', props.savedMovies);
 
     // Подписываемся на контекст CurrentUserContext
     const currentUser = React.useContext(CurrentUserContext);
