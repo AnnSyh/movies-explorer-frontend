@@ -154,6 +154,8 @@
   width: 20px;
   height: 20px;
 }
+
+.null.checkbox__slider_green:before,
 .true.checkbox__slider_green:before,
 .checkbox__slider_green:before {
   background-color: #2BE080;
