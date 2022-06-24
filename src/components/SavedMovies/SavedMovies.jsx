@@ -113,15 +113,8 @@ function SavedMovies(props) {
 
     // // отрисовка сохраненых/удаленных карточек
     useEffect(() => {
-
-        const res = JSON.parse(localStorage.getItem('savedMovies'));
-
-        console.log('useEffect: savedMoviesArr = ', res)
         console.log('useEffect:  props.savedMovies = ', props.savedMovies)
-
-              setFilteredMovies([...props.savedMovies])
-
-       
+        setFilteredMovies([...props.savedMovies])
     }, [props.savedMovies])
 
 
