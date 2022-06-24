@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
 import './card.css';
 
 function Card(props) {
+    console.log('Card:  props = ', props );
     console.log('Card:  props.saved = ', props.saved );
 
     //cохранение фильма в базу mongodb
@@ -33,12 +33,12 @@ function Card(props) {
     }
 
     const label = (
-        <label className="checkbox checkbox_img" >
+        <label className='checkbox checkbox_img' >
             <span
                 className={
                     props.saved
-                        ? `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card checkbox__slider_green`
-                        : `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card`
+                        ? `${localStorage.getItem('saved')} checkbox__slider checkbox__slider_card checkbox__slider_green`
+                        : `${localStorage.getItem('saved')} checkbox__slider checkbox__slider_card`
                 }
                 onClick={handleCheckboxClick}
             ></span>
@@ -48,7 +48,7 @@ function Card(props) {
     const cross = (
         <>
             <button
-                className="cards__trash"
+                className='cards__trash'
                 onClick={handleTrashClick}
             ></button>
         </>
@@ -57,7 +57,7 @@ function Card(props) {
     return (
         <li className='cards__item'>
             <div className='cards__pic'>
-                <a className="link" href={props.trailerLink}>
+                <a className='link' href={props.trailerLink}>
 
                     <img className='cards__img'
                         src={
