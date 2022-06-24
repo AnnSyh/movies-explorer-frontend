@@ -75,35 +75,55 @@ function App() {
     setIsApiError(true);
   }
 
-  // авторизация пользователя (логин)
-  function handleLogin(username, password) {
+
+  // регистрация пользователя 
+  function handleRegister(data) {
     auth
-      .authorize(username, password)
+      .register(data)
+      .then((res) => {
+        // setisSuccessInfoTooltipOpen(true);
+        // history.push('/signin')
+        console.log('Register: res = ', res);
+        if (res._id) {
+          const newData = {
+            email: data.email,
+            password: data.password
+          }
+          handleLogin(newData);
+        }
+      }
+      )
+      .catch((err) => {
+        // setMessageText(`handleRegister: catch: ` + err);
+        // setPopupOpen(true);
+
+        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+          setMessageText(`Register: catch: ` + ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        }
+      })
+  }
+
+  // авторизация пользователя (логин)
+  function handleLogin(data) {
+    auth
+      .authorize(data)
       .then((data) => {
-        const userData = { username, password }
         localStorage.setItem('token', data.token);  // в localStorage записываем текущий token
-        setUserData(userData)                       // устанавливаем данные юзера
+        setUserData(data)                           // устанавливаем данные юзера
         setLoggedIn(true)                           // меняем состояние на залогинен
       })
       .catch((err) => {
         setMessageText(`handleLogin: catch: ` + err);
-        setPopupOpen(true);
+        // setPopupOpen(true);
+
+        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+          setMessageText(`Login: catch: ` + ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        }
       })
   }
 
-  // регистрация пользователя 
-  function handleRegister(email, password) {
-    auth
-      .register(email, password)
-      .then((res) => {
-        setisSuccessInfoTooltipOpen(true);
-        history.push('/signin')
-      })
-      .catch((err) => {
-        setMessageText(`handleRegister: catch: ` + err);
-        setPopupOpen(true);
-      })
-  }
 
   //Функция проверки токена в локальном хранилище
   const tokenCheck = () => {
@@ -179,12 +199,12 @@ function App() {
       card.nameRU || 'unknown',
       card.nameEN || 'unknown'
     )
-      .then((res) => { 
-        setSavedMovies([res, ...savedMovies]); 
+      .then((res) => {
+        setSavedMovies([res, ...savedMovies]);
       })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
@@ -217,7 +237,7 @@ function App() {
       })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
           setMessageText(ERROR_CODE_INTERNAL_DEL);
           setPopupOpen(true);
         }
@@ -263,23 +283,23 @@ function App() {
 
   }, []);
 
-    //получение сохраненных пользователем фильмов
-    useEffect(() => {
-      if (loggedIn) {
-        mainApi
-          .getSavedMovies()
-          .then((data) => {
-            setSavedMovies(data.movies); //*** */
-            // setSavedMovies(data);
-            localStorage.setItem('savedMovies', JSON.stringify(data.movies));
-          })
-          .catch(err => {
-            setMessageText(`getSavedMovies: catch: ` + err);
-            setPopupOpen(true);
-          })
-      }
-    }, [loggedIn]);
-  
+  //получение сохраненных пользователем фильмов
+  useEffect(() => {
+    if (loggedIn) {
+      mainApi
+        .getSavedMovies()
+        .then((data) => {
+          setSavedMovies(data.movies); //*** */
+          // setSavedMovies(data);
+          localStorage.setItem('savedMovies', JSON.stringify(data.movies));
+        })
+        .catch(err => {
+          setMessageText(`getSavedMovies: catch: ` + err);
+          setPopupOpen(true);
+        })
+    }
+  }, [loggedIn]);
+
 
   // кнопка Escape
   useEffect(() => {
@@ -314,7 +334,7 @@ function App() {
   }, [loggedIn]);
 
 
-// ------------------------------
+  // ------------------------------
 
 
 
@@ -355,7 +375,7 @@ function App() {
             handlePopupOpen={handlePopupOpen}
             component={Movies}
 
-            // showCardList={showCardList}
+          // showCardList={showCardList}
           >
           </ProtectedRoute>
 
@@ -373,7 +393,7 @@ function App() {
 
             savedMovies={savedMovies}
 
-            // showCardList={showCardList}
+          // showCardList={showCardList}
           >
           </ProtectedRoute>
 
@@ -392,8 +412,8 @@ function App() {
 
         </Switch>
         <Route exact path={footerEndpoints}>
-            <Footer />
-          </Route>
+          <Footer />
+        </Route>
 
         {/* попап с ошибкой */}
         <InfoTooltip
