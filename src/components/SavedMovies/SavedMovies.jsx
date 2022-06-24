@@ -7,8 +7,8 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 
 function SavedMovies(props) {
-    console.log('111 SavedMovies props.savedMovies === ', props);
-    console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
+    // console.log('111 SavedMovies props.savedMovies === ', props);
+    // console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
     // console.log('111 props.savedUserMovie= ', props.savedUserMovie);
     // console.log('SavedMovies props.setFilteredMovies= ', props.setFilteredMovies);
 
@@ -113,7 +113,7 @@ function SavedMovies(props) {
 
     // // отрисовка сохраненых/удаленных карточек
     useEffect(() => {
-        console.log('useEffect:  props.savedMovies = ', props.savedMovies)
+        // console.log('useEffect:  props.savedMovies = ', props.savedMovies)
         setFilteredMovies([...props.savedMovies])
     }, [props.savedMovies])
 

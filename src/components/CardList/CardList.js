@@ -5,20 +5,10 @@ import Card from '../../components/Card/Card';
 
 function CardList(props) {
     // console.log('! CardList: props = ', props);
-    console.log('CardList: props.moviesList = ', props.moviesList); // общее кол-во всех сохраненных фильмов
-    console.log('#### CardList: props.savedMovies = ', props.savedMovies); // общее кол-во всех сохраненных фильмов
 
     const [showMovieList, setShowMovieList] = useState([]);
-
-    console.log('CardList: showMovieList = ', showMovieList);   // кол-во показываемых настр сохраненных фильмов 
-                                                                //(показываем по 4 +2)
-
     const savedMoviesPage = false;
-    const [showCardList, setShowCardList] = useState([]);
     const [cardsShowDetails, setCardsShowDetails] = useState({ total: 12, extra: 4 });
-
-    console.log('3333 CardList: showCardList = ', showCardList);
-
     const [isMount, setIsMount] = useState(true);
     const getScreenWidth = useCallback(() => window.innerWidth, []);
     const [screenWidth, setScreenWidth] = useState(getScreenWidth());
@@ -28,7 +18,7 @@ function CardList(props) {
         mobile: { width: 480, cards: { total: 4, extra: 2 } },
     }
 
-    //получение текущего разрешения экрана пользователя
+    // получение текущего разрешения экрана пользователя
     useEffect(() => {
         function handleScreenResize() {
             setScreenWidth(getScreenWidth());
@@ -47,7 +37,7 @@ function CardList(props) {
     }, [getScreenWidth]);
 
 
-    //отрисовка карточек при разных разрешениях
+    // отрисовка карточек при разных разрешениях
     useEffect(() => {
         if (screenWidth >= moviesCount.desktop.width) {
             setCardsShowDetails(moviesCount.desktop.cards);
@@ -60,16 +50,15 @@ function CardList(props) {
     }, [screenWidth, isMount]);
     // }, [screenWidth, isMount, moviesCount.desktop, moviesCount.tablet, moviesCount.mobile]);
 
-    //отрисовка карточек при разных разрешениях
+    // отрисовка карточек при разных разрешениях
     useEffect(() => {
         if (props.moviesList.length) {
             const res = props.moviesList.filter((item, i) => i < cardsShowDetails.total);
-            // setShowCardList(res);
             setShowMovieList(res);
         }
     }, [props.moviesList, savedMoviesPage, cardsShowDetails.total]);
 
-    //отрисовка дополнительных фильмов при клике по кнопке
+    // отрисовка дополнительных фильмов при клике по кнопке
     function handleClickMoreCards() {
 
         const start = showMovieList.length;
@@ -82,7 +71,7 @@ function CardList(props) {
         }
     };
 
-    //проверка обьекта на пустоту 
+    // проверка обьекта на пустоту 
     function isEmpty(obj) {
         for (var key in obj) {
             return false;
@@ -90,10 +79,9 @@ function CardList(props) {
         return true;
     }
 
-    // //проверка сохранения фильма
+    // проверка сохранения фильма
     function getSavedMovieCard(savedMovies, movie) {
         const isEmptyConst = isEmpty(savedMovies);
-        // console.log('isEmpty(savedMovies)', isEmpty(savedMovies));
         if (!isEmptyConst) {
             return savedMovies.find(m => m.movieId === movie.id)
         }

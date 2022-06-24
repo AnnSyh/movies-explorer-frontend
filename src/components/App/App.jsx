@@ -30,9 +30,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false)//открытие попапа общего
-
   const [isSuccessInfoTooltipOpen, setisSuccessInfoTooltipOpen] = useState(false)
-
   const [loggedIn, setLoggedIn] = useState(false) //регистрация
   const [currentUser, setCurrentUser] = useState({});  //  Отправляем запрос в API и устанавливаем текущего юзера
   const [isApiError, setIsApiError] = useState(false); //Запрос не выполнен:
@@ -42,18 +40,11 @@ function App() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false); // обновление пользователя 
   const history = useHistory();
-
   const [preloading, setPreloading] = useState(false); // крутилка
-
   const [savedMovies, setSavedMovies] = useState([]); //сохраняем сюда выбранные фильмы
-
-  console.log('111 savedMovies = ', savedMovies);
-  // console.log('111 cards = ', cards);
-
+  // console.log('111 savedMovies = ', savedMovies);
   const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || null);
-
   const { pathname } = useLocation();
-
   const [messageText, setMessageText] = useState('сообщения для ошибок');// сообщения для ошибок
 
   const footerEndpoints = ['/movies', '/saved-movies', '/'];
@@ -97,7 +88,7 @@ function App() {
         // setMessageText(`handleRegister: catch: ` + err);
         // setPopupOpen(true);
 
-        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Register: catch: ` + ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
@@ -117,7 +108,7 @@ function App() {
         setMessageText(`handleLogin: catch: ` + err);
         // setPopupOpen(true);
 
-        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Login: catch: ` + ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
@@ -192,11 +183,11 @@ function App() {
       card.duration || 0,
       card.year || 'unknown',
       card.description || 'unknown',
-      'https://api.nomoreparties.co/' + card.image.url || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.url || 'https://unknown',
       card.trailerLink || 'unknown',
-      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'unknown',
+      'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'https://unknown',
       card.id,
-      card.nameRU || 'unknown',
+      card.nameRU || 'без имени',
       card.nameEN || 'unknown'
     )
       .then((res) => {
@@ -204,7 +195,7 @@ function App() {
       })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
@@ -237,7 +228,7 @@ function App() {
       })
       .catch((err) => {
         console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка 400' || err === 'Ошибка 500' || err === 'Ошибка 404') {
+        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(ERROR_CODE_INTERNAL_DEL);
           setPopupOpen(true);
         }

@@ -3,11 +3,7 @@ import { useState } from 'react';
 import './card.css';
 
 function Card(props) {
-
-    // console.log('Card:  props= ', props );
-    // console.log('Card:  props.saved = ', props.saved );
-    // console.log('Card:  props.savedMoviesPage = ', props.savedMoviesPage );
-
+    console.log('Card:  props.saved = ', props.saved );
 
     //cохранение фильма в базу mongodb
     function handleSaveClick() {
@@ -27,32 +23,22 @@ function Card(props) {
     //выделение выбранного пользователем фильма
     function handleCheckboxClick() {
         if (props.saved) {  // if(true)
-            console.log('if удаление фильма из базы mongodb')
-
+            console.log('удаление фильма из базы mongodb')
             handleTrashClick(); // удаляется из массива и локалсториджа 
-            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
 
         } else {
-            localStorage.setItem('saved', !props.saved); // нужно для смены класса чекбокса
-            // props.saved = localStorage.getItem('saved', !props.saved);
-
-            console.log('else добавление фильма в базу mongodb')
-
-            // props.handleSaveMovie();// добавляется в массив и локалсторидж 
+            console.log('добавление фильма в базу mongodb')
             handleSaveClick();// добавляется в массив и локалсторидж 
         }
-        // // запомним лайкнутую карточку
-        // localStorage.setItem('saved', saved);
     }
 
     const label = (
         <label className="checkbox checkbox_img" >
             <span
                 className={
-                    // !saved
                     props.saved
-                        ?  `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card checkbox__slider_green`
-                        :   `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card`
+                        ? `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card checkbox__slider_green`
+                        : `${localStorage.getItem("saved")} checkbox__slider checkbox__slider_card`
                 }
                 onClick={handleCheckboxClick}
             ></span>
@@ -75,7 +61,6 @@ function Card(props) {
 
                     <img className='cards__img'
                         src={
-                            // props.savedMoviesPage
                             props.pathname === '/saved-movies'
                                 ? props.image
                                 : 'https://api.nomoreparties.co' + props.image.formats.thumbnail.url
@@ -88,7 +73,6 @@ function Card(props) {
                 <div className='cards__tex-row'>
                     <h2 className='cards__title text-overflow'>{props.nameRU}</h2>
                     {
-                        // savedMoviesPage
                         props.pathname === '/saved-movies'
                             ? cross
                             : label

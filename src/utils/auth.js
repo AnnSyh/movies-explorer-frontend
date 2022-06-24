@@ -23,7 +23,6 @@ export const register = (values) => {
 
 //Функция авторизация пользователя
 export const authorize = (values) => {
-  console.log('!!! authorize');
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
