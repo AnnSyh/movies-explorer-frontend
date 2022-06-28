@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 // import CurrentUserContext from '../contexts/CurrentUserContext';
 import Card from '../../components/Card/Card';
+import { DEVICE_WIDTH } from "../../utils/config";
 
 function CardList(props) {
     // console.log('! CardList: props = ', props);
@@ -12,11 +13,7 @@ function CardList(props) {
     const [isMount, setIsMount] = useState(true);
     const getScreenWidth = useCallback(() => window.innerWidth, []);
     const [screenWidth, setScreenWidth] = useState(getScreenWidth());
-    const moviesCount = {
-        desktop: { width: 1280, cards: { total: 12, extra: 4 } },
-        tablet: { width: 768, cards: { total: 9, extra: 3 } },
-        mobile: { width: 480, cards: { total: 4, extra: 2 } },
-    }
+    const moviesCount = DEVICE_WIDTH;
 
     // получение текущего разрешения экрана пользователя
     useEffect(() => {
