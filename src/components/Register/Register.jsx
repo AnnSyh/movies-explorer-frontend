@@ -41,7 +41,7 @@ function Register({ handleRegister }) {
                     minLength='2'
                     maxLength='15'
                     placeholder='Имя'
-                    // pattern='[a-zA-Zа-яА-Я -]'
+                    pattern='^[A-Za-zА-Яа-яЁё /s -]+$'
 
                     value={values.name || ""}
                     onChange={handleChangeInput}

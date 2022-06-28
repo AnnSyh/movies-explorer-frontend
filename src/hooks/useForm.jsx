@@ -1,6 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
-import { useCallback } from 'react';
+import { useState, useCallback} from 'react';
+import isEmail from 'validator/lib/isEmail';
+// const isEmail = require('validator/lib/isEmail');
 
 //хук управления формой
 export function useForm() {
@@ -31,6 +32,22 @@ export function useFormWithValidation() {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+
+    if (name === 'name' && target.validity.patternMismatch) {
+      target.setCustomValidity('Имя должно содержать только латиницу, кириллицу, пробел или дефис.')
+    } else {
+      target.setCustomValidity('');
+    }
+
+    if (name === 'email') {
+      if (!isEmail(value)) {
+        target.setCustomValidity('Некорректый адрес почты.');
+      } else {
+        target.setCustomValidity('');
+      }
+    }
+
+
     setValues({...values, [name]: value});
     setErrors({...errors, [name]: target.validationMessage });
     setIsValid(target.closest("form").checkValidity());
