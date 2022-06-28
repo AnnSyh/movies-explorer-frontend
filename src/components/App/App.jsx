@@ -18,7 +18,8 @@ import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import {
   ERROR_CODE_INTERNAL_ADD,
-  ERROR_CODE_INTERNAL_DEL
+  ERROR_CODE_INTERNAL_DEL,
+  ERROR_409
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -92,6 +93,11 @@ function App() {
           setMessageText(`Register: catch: ` + ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
+        if (err === 409) {
+          setMessageText(ERROR_409);
+          setPopupOpen(true);
+        }
+
       })
   }
 

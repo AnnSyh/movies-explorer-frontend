@@ -1,12 +1,26 @@
 export const BASE_URL = 'https://mesto.backend.annsyh.nomoredomains.work';
 
 const handleResponse = response => {
-if (response.ok) { 
-  return response.json();
-}
+  const result = response.json();
+  const status = response.status;
 
-return Promise.reject(`Ошибка ${response.status}`);
+  console.log('result = ',result)
+  console.log('status = ',status)
+
+if (response.ok) { 
+  return result;
+}
+return Promise.reject(response.status);
 };
+
+
+  // // проверка статуса запроса
+  // async _requestResult(res) {
+  //   const result = await res.json();
+  //   return res.ok ? result : Promise.reject(result.message);
+  // }
+
+
 
 //Функция регистрация пользователя
 export const register = (values) => {
@@ -18,7 +32,9 @@ export const register = (values) => {
     },
     body: JSON.stringify(values)
   })
-  .then(handleResponse);
+  .then(res => handleResponse(res));
+  // .then(res => res.json())
+  // .then(handleResponse);
 };
 
 //Функция авторизация пользователя

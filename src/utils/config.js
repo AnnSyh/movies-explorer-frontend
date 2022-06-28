@@ -3,6 +3,7 @@ const MOVIES_URL = 'https://api.nomoreparties.co';
 
 const ERROR_CODE_INTERNAL_DEL = 'При удалении фильма на сервере произошла ошибка, пожалуйста, обновите страницу и попробуйте еще раз';
 const ERROR_CODE_INTERNAL_ADD = 'При добавлении фильма на сервере произошла ошибка, пожалуйста, обновите страницу и попробуйте еще раз';
+const ERROR_409 = 'Пользователь с таким email уже существует.';
 
 const DEVICE_WIDTH = {
   desktop: { width: 1280, cards: { total: 12, extra: 4 } },
@@ -15,5 +16,6 @@ module.exports = {
   MOVIES_URL,
   ERROR_CODE_INTERNAL_DEL,
   ERROR_CODE_INTERNAL_ADD,
-  DEVICE_WIDTH
+  DEVICE_WIDTH,
+  ERROR_409
 }
