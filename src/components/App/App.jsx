@@ -86,9 +86,6 @@ function App() {
       }
       )
       .catch((err) => {
-        // setMessageText(`handleRegister: catch: ` + err);
-        // setPopupOpen(true);
-
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Register: catch: ` + ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
@@ -96,8 +93,10 @@ function App() {
         if (err === 409) {
           setMessageText(ERROR_409);
           setPopupOpen(true);
+        } else {
+          setMessageText(`handleLogin: catch: ` + err);
+          setPopupOpen(true);
         }
-
       })
   }
 
@@ -109,13 +108,16 @@ function App() {
         localStorage.setItem('token', data.token);  // в localStorage записываем текущий token
         setUserData(data)                           // устанавливаем данные юзера
         setLoggedIn(true)                           // меняем состояние на залогинен
+
+        setMessageText(`Добро пожаловать!`);        // сообщение об удачной авторизации/регистрации
+        setPopupOpen(true);
       })
       .catch((err) => {
-        setMessageText(`handleLogin: catch: ` + err);
-        // setPopupOpen(true);
-
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Login: catch: ` + ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        } else {
+          setMessageText(`handleLogin: catch: ` + err);
           setPopupOpen(true);
         }
       })

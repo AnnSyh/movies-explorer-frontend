@@ -67,11 +67,20 @@ function Profile(props) {
         }
     }, [currentUser, resetForm]);
 
+    const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
+
+    // console.log('111 !requirementValidity= ',!requirementValidity);
+    // console.log('222 изменения input.name = ',currentUser.name === values.name);
+    // console.log('222 изменения input.email = ',currentUser.email === values.email);
+
+
     const profileLinks = <>
 
         <button onClick={handleEditButton}
             type='submit'
+            // className='profile__link'
             className='profile__link link profile__link-edit'
+            // disabled={isValid}
         >
             Редактировать
         </button>
@@ -89,11 +98,11 @@ function Profile(props) {
         <button onClick={handleEditButton}
             type='submit'
             className={
-                !isValid
+                requirementValidity
                     ? `profile__btn`
                     : `profile__btn link profile__btn-valid`
             }
-            disabled={!isValid}
+            disabled={requirementValidity}
         >Сохранить
         </button>
     </>
@@ -127,6 +136,7 @@ function Profile(props) {
                                     value={values.name || ''}
                                     disabled={!isEditModeOn}
                                     onChange={handleChangeInput || handleUserName}
+                                    pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
                                 />
                             </label>
                             <span className='profile__error'>{errors.name}</span>
@@ -145,7 +155,7 @@ function Profile(props) {
                                     onChange={handleChangeInput || handleUserEmail}
                                 />
                             </label>
-                            <span className='profile__error'>{errors.email}</span>
+                            <span className='profile__error'>{errors.email || ''}</span>
                         </fieldset>
 
                         <div className='profile__links'>
