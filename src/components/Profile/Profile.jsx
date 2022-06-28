@@ -8,20 +8,10 @@ import { useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
 
-    // console.log('Profile props = ',props);
-
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
-
     const [isEditModeOn, setIsEditModeOn] = useState(false);
     const [isUpdateUser, setIsUpdateUser] = useState(false);
-    // ----------------------------
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
-
-    const [name, setName] = useState(currentUser.name);
-    const [previousName, setPreviousName] = useState(currentUser.name);
-    const [email, setEmail] = useState(currentUser.email);
-    const [previousEmail, setPreviousEmail] = useState(currentUser.email);
-    const [isActiveButton, setIsActiveButton] = useState(false); //для активности кнопки Сохранить
 
     function handleEditButton() {
         setIsEditModeOn(true);
@@ -38,28 +28,6 @@ function Profile(props) {
         }
     }
 
-    //ввод данных, сверка со старыми
-    function handleUserName(evt) {
-        const value = evt.target.value;
-        setName(value);
-        if (value !== previousName) {
-            setIsActiveButton(true);
-        } else {
-            setIsActiveButton(false);
-        }
-    }
-
-    //ввод данных, сверка со старыми
-    function handleUserEmail(evt) {
-        const value = evt.target.value;
-        setEmail(value);
-        if (value !== previousEmail) {
-            setIsActiveButton(true);
-        } else {
-            setIsActiveButton(false);
-        }
-    }
-
     //передаем введенный в поля текст
     useEffect(() => {
         if (currentUser) {
@@ -67,20 +35,13 @@ function Profile(props) {
         }
     }, [currentUser, resetForm]);
 
-    const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
-
-    // console.log('111 !requirementValidity= ',!requirementValidity);
-    // console.log('222 изменения input.name = ',currentUser.name === values.name);
-    // console.log('222 изменения input.email = ',currentUser.email === values.email);
-
+    const conditionValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
 
     const profileLinks = <>
 
         <button onClick={handleEditButton}
             type='submit'
-            // className='profile__link'
             className='profile__link link profile__link-edit'
-            // disabled={isValid}
         >
             Редактировать
         </button>
@@ -98,11 +59,11 @@ function Profile(props) {
         <button onClick={handleEditButton}
             type='submit'
             className={
-                requirementValidity
+                conditionValidity
                     ? `profile__btn`
                     : `profile__btn link profile__btn-valid`
             }
-            disabled={requirementValidity}
+            disabled={conditionValidity}
         >Сохранить
         </button>
     </>
@@ -135,7 +96,7 @@ function Profile(props) {
                                     maxLength='15'
                                     value={values.name || ''}
                                     disabled={!isEditModeOn}
-                                    onChange={handleChangeInput || handleUserName}
+                                    onChange={handleChangeInput}
                                     pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
                                 />
                             </label>
@@ -152,7 +113,7 @@ function Profile(props) {
                                     minLength='2'
                                     value={values.email || ''}
                                     disabled={!isEditModeOn}
-                                    onChange={handleChangeInput || handleUserEmail}
+                                    onChange={handleChangeInput}
                                 />
                             </label>
                             <span className='profile__error'>{errors.email || ''}</span>
