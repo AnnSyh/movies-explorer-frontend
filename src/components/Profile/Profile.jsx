@@ -7,8 +7,12 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
-
+    // console.log('Profile: props = ', props)
+    
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
+ 
+    // console.log('Profile: currentUser = ', currentUser)
+    
     const [isEditModeOn, setIsEditModeOn] = useState(false);
     const [isUpdateUser, setIsUpdateUser] = useState(false);
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
@@ -73,6 +77,7 @@ function Profile(props) {
             <div className="auth profile__wrapper">
                 <main className='profile'>
                     <h1 className='profile__title'>Привет, {`${currentUser.name}`}!</h1>
+                    {/* <h1 className='profile__title'>Привет!</h1> */}
 
                     <form
                         className={

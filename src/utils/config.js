@@ -5,6 +5,7 @@ const ERROR_CODE_INTERNAL_DEL = 'При удалении фильма на се�
 const ERROR_CODE_INTERNAL_ADD = 'При добавлении фильма на сервере произошла ошибка, пожалуйста, обновите страницу и попробуйте еще раз';
 const ERROR_409 = 'Пользователь с таким email уже существует.';
 const ERROR_401 = 'Неправильные почта или пароль.';
+const ERROR_TOO_MANY_REGUESTS = 'Too many requests';
 
 const DEVICE_WIDTH = {
   desktop: { width: 1280, cards: { total: 12, extra: 4 } },
@@ -19,5 +20,6 @@ module.exports = {
   ERROR_CODE_INTERNAL_ADD,
   DEVICE_WIDTH,
   ERROR_409,
-  ERROR_401
+  ERROR_401,
+  ERROR_TOO_MANY_REGUESTS
 }

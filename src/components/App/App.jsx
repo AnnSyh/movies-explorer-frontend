@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useHistory, useLocation, Redirect} from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -20,7 +20,8 @@ import {
   ERROR_CODE_INTERNAL_ADD,
   ERROR_CODE_INTERNAL_DEL,
   ERROR_409,
-  ERROR_401
+  ERROR_401,
+  ERROR_TOO_MANY_REGUESTS
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -95,7 +96,8 @@ function App() {
           setMessageText(ERROR_409);
           setPopupOpen(true);
         } else {
-          setMessageText(`handleLogin: catch: ` + err);
+          // setMessageText(`Register: handleLogin: catch: ` + err);
+          setMessageText(ERROR_TOO_MANY_REGUESTS);
           setPopupOpen(true);
         }
       })
@@ -111,6 +113,7 @@ function App() {
         setLoggedIn(true)                           // меняем состояние на залогинен
 
         history.push('/movies');
+        // setMessageText(`Добро пожаловать!` +  currentUser.name);        // сообщение об удачной авторизации/регистрации
         setMessageText(`Добро пожаловать!`);        // сообщение об удачной авторизации/регистрации
         setPopupOpen(true);
       })
@@ -118,12 +121,13 @@ function App() {
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Login: catch: ` + ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
-        } 
+        }
         if (err === 401) {
           setMessageText(ERROR_401);
           setPopupOpen(true);
         } else {
-          setMessageText(`handleLogin: catch: ` + err);
+          // setMessageText(`Login: handleLogin: catch: ` + err);
+          setMessageText(ERROR_TOO_MANY_REGUESTS);
           setPopupOpen(true);
         }
       })
@@ -219,7 +223,6 @@ function App() {
 
   // Функция удаления фильма
   function handleDeleteMovie(movie) {
-    // const savedMovie = savedMovies.movies.find((item) => {  //*** */
     const savedMovie = savedMovies.find((item) => {
       if (item.movieId === movie.id || item.movieId === movie.movieId) {
         return item
@@ -229,7 +232,6 @@ function App() {
     })
     mainApi.deleteMovie(savedMovie._id)
       .then(() => {
-        // const newMoviesList = savedMovies.movies.filter((m) => { //*** */
         const newMoviesList = savedMovies.filter((m) => {
           if (movie.id === m.movieId || movie.movieId === m.movieId) {
             return false
@@ -325,13 +327,25 @@ function App() {
   useEffect(() => tokenCheck(), [])
 
   useEffect(() => {
+    const path = pathname;
+    console.log('useEffect: path = ',pathname );
+
     if (!loggedIn) {
+      history.push(path);
       return;
     }
     mainApi.updateTokenInHeaders();
     mainApi
       .getUserInfo()
-      .then(setCurrentUser)
+      // .then(setCurrentUser)
+      .then((data) => {
+
+        if(data){
+          setCurrentUser(data);
+          history.push(path);
+        }
+
+      })
       .catch((err) => {
         handleApiError(err);
         setMessageText(`useEffect() getUserInfo catch: ` + err);
@@ -355,13 +369,18 @@ function App() {
         <Switch>
 
           <Route exact path='/signup'>
-            <Register
-              handleRegister={handleRegister}
-            />
+            {!loggedIn ? (
+              <Register handleRegister={handleRegister} />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
-
           <Route exact path='/signin'>
-            <Login handleLogin={handleLogin} />
+            {!loggedIn ? (
+              <Login handleLogin={handleLogin} />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
 
           <Route exact path='/' >
