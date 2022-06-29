@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation, Redirect} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -19,7 +19,8 @@ import mainApi from "../../utils/MainApi";
 import {
   ERROR_CODE_INTERNAL_ADD,
   ERROR_CODE_INTERNAL_DEL,
-  ERROR_409
+  ERROR_409,
+  ERROR_401
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -109,12 +110,17 @@ function App() {
         setUserData(data)                           // устанавливаем данные юзера
         setLoggedIn(true)                           // меняем состояние на залогинен
 
+        history.push('/movies');
         setMessageText(`Добро пожаловать!`);        // сообщение об удачной авторизации/регистрации
         setPopupOpen(true);
       })
       .catch((err) => {
         if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
           setMessageText(`Login: catch: ` + ERROR_CODE_INTERNAL_ADD);
+          setPopupOpen(true);
+        } 
+        if (err === 401) {
+          setMessageText(ERROR_401);
           setPopupOpen(true);
         } else {
           setMessageText(`handleLogin: catch: ` + err);
@@ -284,20 +290,22 @@ function App() {
 
   //получение сохраненных пользователем фильмов
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && currentUser) {
       mainApi
         .getSavedMovies()
         .then((data) => {
-          setSavedMovies(data.movies); //*** */
-          // setSavedMovies(data);
-          localStorage.setItem('savedMovies', JSON.stringify(data.movies));
+          // setSavedMovies(data.movies); 
+          // localStorage.setItem('savedMovies', JSON.stringify(data.movies));
+          const UserMoviesList = data.movies.filter(m => m.owner === currentUser._id);
+          setSavedMovies(UserMoviesList);
+          localStorage.setItem('savedMovies', JSON.stringify(UserMoviesList));
         })
         .catch(err => {
-          setMessageText(`getSavedMovies: catch: ` + err);
+          setMessageText(`222 getSavedMovies: catch: ` + err);
           setPopupOpen(true);
         })
     }
-  }, [loggedIn]);
+  }, [currentUser, loggedIn]);
 
 
   // кнопка Escape
@@ -320,7 +328,6 @@ function App() {
     if (!loggedIn) {
       return;
     }
-    history.push('/movies');
     mainApi.updateTokenInHeaders();
     mainApi
       .getUserInfo()
@@ -347,13 +354,13 @@ function App() {
 
         <Switch>
 
-          <Route path='/signup'>
+          <Route exact path='/signup'>
             <Register
               handleRegister={handleRegister}
             />
           </Route>
 
-          <Route path='/signin'>
+          <Route exact path='/signin'>
             <Login handleLogin={handleLogin} />
           </Route>
 
