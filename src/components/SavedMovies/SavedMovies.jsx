@@ -8,7 +8,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function SavedMovies(props) {
     // console.log('111 SavedMovies props.savedMovies === ', props);
-    // console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
+    console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
     // console.log('111 props.savedUserMovie= ', props.savedUserMovie);
     // console.log('SavedMovies props.setFilteredMovies= ', props.setFilteredMovies);
 
@@ -101,21 +101,36 @@ function SavedMovies(props) {
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
 
+
             if (localStorage.getItem('shortMovies') === 'true') {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
                 setFilteredMovies(movies);
             }
+            
+            if (props.savedMovies) {
+                setFilteredMovies(props.savedMovies)
+            }
+
         } else {
             setNothingFound(true)
         }
-    }, [currentUser]);
+    }, [currentUser, props.savedMovies]);
 
     // // отрисовка сохраненых/удаленных карточек
-    useEffect(() => {
-        // console.log('useEffect:  props.savedMovies = ', props.savedMovies)
-        setFilteredMovies([...props.savedMovies])
-    }, [props.savedMovies])
+    // useEffect(() => {
+    //     // console.log('useEffect:  props.savedMovies = ', props.savedMovies)
+
+    //     // console.log('222 localStorage.savedMovies = ',localStorage.savedMovies);
+
+    //     setFilteredMovies(props.savedMovies)
+
+    //     localStorage.setItem('savedMovies', JSON.stringify(props.savedMovies));
+
+    //     // console.log('333 localStorage.savedMovies = ',localStorage.savedMovies);
+
+
+    // }, [props.savedMovies])
 
 
     return (

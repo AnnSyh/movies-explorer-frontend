@@ -21,7 +21,8 @@ import {
   ERROR_CODE_INTERNAL_DEL,
   ERROR_409,
   ERROR_401,
-  ERROR_TOO_MANY_REGUESTS
+  ERROR_TOO_MANY_REGUESTS,
+  ERROR_CODE_NOT_FOUND
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -202,7 +203,7 @@ function App() {
       card.year || 'unknown',
       card.description || 'unknown',
       'https://api.nomoreparties.co/' + card.image.url || 'https://unknown',
-      card.trailerLink || 'unknown',
+      card.trailerLink || 'https://unknown',
       'https://api.nomoreparties.co/' + card.image.formats.thumbnail.url || 'https://unknown',
       card.id,
       card.nameRU || 'без имени',
@@ -212,24 +213,36 @@ function App() {
         setSavedMovies([res, ...savedMovies]);
       })
       .catch((err) => {
-        console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+        if (err === 'Ошибка: 500') {
           setMessageText(ERROR_CODE_INTERNAL_ADD);
           setPopupOpen(true);
         }
+        if (err === 'Ошибка: 400') {
+          setMessageText('Некорректный адрес URL.');
+          setPopupOpen(true);
+        }
+        if (err === 'Ошибка: 404') {
+          setMessageText(ERROR_CODE_NOT_FOUND);
+          setPopupOpen(true);
+        }
+        console.log('saveMovie: catch: err = ', err);
       })
 
   }
 
   // Функция удаления фильма
   function handleDeleteMovie(movie) {
-    const savedMovie = savedMovies.find((item) => {
-      if (item.movieId === movie.id || item.movieId === movie.movieId) {
-        return item
-      } else {
-        return savedMovies
-      }
-    })
+    const savedMovie = savedMovies.find(
+      (item) => item.movieId === movie.id || item.movieId === movie.movieId
+      )
+
+    console.log('savedMovie = ', savedMovie);
+
+    // if(savedMovie){
+    //   setMessageText(`savedMovie = `+ savedMovie.nameRU);
+    //   setPopupOpen(true);
+    // }
+
     mainApi.deleteMovie(savedMovie._id)
       .then(() => {
         const newMoviesList = savedMovies.filter((m) => {
@@ -239,15 +252,24 @@ function App() {
             return true
           }
         })
+        console.log('newMoviesList = ', newMoviesList);
         setSavedMovies(newMoviesList);
-        // должен измениться checkbox на белый
+        localStorage.setItem('savedMovies', JSON.stringify(newMoviesList));
       })
       .catch((err) => {
-        console.log('saveMovie: catch: err = ', err);
-        if (err === 'Ошибка: 400' || err === 'Ошибка: 500' || err === 'Ошибка: 404') {
+        if (err === 'Ошибка: 500') {
           setMessageText(ERROR_CODE_INTERNAL_DEL);
           setPopupOpen(true);
         }
+        if (err === 'Ошибка: 400') {
+          setMessageText('Некорректный адрес URL.');
+          setPopupOpen(true);
+        }
+        if (err === 'Ошибка: 404') {
+          setMessageText(ERROR_CODE_NOT_FOUND);
+          setPopupOpen(true);
+        }
+        console.log('saveMovie: catch: err = ', err);
       });
   };
 

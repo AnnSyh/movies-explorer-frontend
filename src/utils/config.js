@@ -6,6 +6,7 @@ const ERROR_CODE_INTERNAL_ADD = 'При добавлении фильма на �
 const ERROR_409 = 'Пользователь с таким email уже существует.';
 const ERROR_401 = 'Неправильные почта или пароль.';
 const ERROR_TOO_MANY_REGUESTS = 'Too many requests';
+const ERROR_CODE_NOT_FOUND = 'Карточка фильма с указанным _id не найдена.';
 
 const DEVICE_WIDTH = {
   desktop: { width: 1280, cards: { total: 12, extra: 4 } },
@@ -21,5 +22,6 @@ module.exports = {
   DEVICE_WIDTH,
   ERROR_409,
   ERROR_401,
-  ERROR_TOO_MANY_REGUESTS
+  ERROR_TOO_MANY_REGUESTS,
+  ERROR_CODE_NOT_FOUND
 }

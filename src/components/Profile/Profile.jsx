@@ -8,11 +8,8 @@ import { useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
     // console.log('Profile: props = ', props)
-    
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
- 
     // console.log('Profile: currentUser = ', currentUser)
-    
     const [isEditModeOn, setIsEditModeOn] = useState(false);
     const [isUpdateUser, setIsUpdateUser] = useState(false);
     const { values, handleChangeInput, errors, isValid, resetForm } = useFormWithValidation()  // хук валидации полей формы
