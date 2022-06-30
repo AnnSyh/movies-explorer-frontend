@@ -95,8 +95,8 @@ function SavedMovies(props) {
     //отображение карточек из локального хранилища
     useEffect(() => {
 
-        if (localStorage.getItem('savedMovies')) {
-            const movies = JSON.parse(localStorage.getItem('savedMovies'));
+        if (props.savedMovies) {
+            const movies = props.savedMovies;
 
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
@@ -107,29 +107,26 @@ function SavedMovies(props) {
             } else {
                 setFilteredMovies(movies);
             }
-            
-            if (props.savedMovies) {
-                setFilteredMovies(props.savedMovies)
-            }
+        }
+//         if (props.savedMovies.length) {
+//             setFilteredMovies(props.savedMovies)
 
-        } else {
+// console.log('filteredMovies = ', filteredMovies(props.savedMovies) )
+
+//         } 
+        else {
             setNothingFound(true)
         }
+
     }, [currentUser, props.savedMovies]);
 
     // // отрисовка сохраненых/удаленных карточек
     // useEffect(() => {
     //     // console.log('useEffect:  props.savedMovies = ', props.savedMovies)
-
     //     // console.log('222 localStorage.savedMovies = ',localStorage.savedMovies);
-
     //     setFilteredMovies(props.savedMovies)
-
     //     localStorage.setItem('savedMovies', JSON.stringify(props.savedMovies));
-
     //     // console.log('333 localStorage.savedMovies = ',localStorage.savedMovies);
-
-
     // }, [props.savedMovies])
 
 
