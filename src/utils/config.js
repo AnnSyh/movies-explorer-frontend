@@ -7,6 +7,7 @@ const ERROR_409 = 'Пользователь с таким email уже суще�
 const ERROR_401 = 'Неправильные почта или пароль.';
 const ERROR_TOO_MANY_REGUESTS = 'Too many requests';
 const ERROR_CODE_NOT_FOUND = 'Карточка фильма с указанным _id не найдена.';
+const ERROR_CODE_BAD_REQUEST = 'Некорректный запрос';
 
 const DEVICE_WIDTH = {
   desktop: { width: 1280, cards: { total: 12, extra: 4 } },
@@ -23,5 +24,6 @@ module.exports = {
   ERROR_409,
   ERROR_401,
   ERROR_TOO_MANY_REGUESTS,
-  ERROR_CODE_NOT_FOUND
+  ERROR_CODE_NOT_FOUND,
+  ERROR_CODE_BAD_REQUEST
 }

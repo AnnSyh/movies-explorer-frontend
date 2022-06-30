@@ -22,7 +22,8 @@ import {
   ERROR_409,
   ERROR_401,
   ERROR_TOO_MANY_REGUESTS,
-  ERROR_CODE_NOT_FOUND
+  ERROR_CODE_NOT_FOUND,
+  ERROR_CODE_BAD_REQUEST
 } from "../../utils/config";
 
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -218,7 +219,7 @@ function App() {
           setPopupOpen(true);
         }
         if (err === 'Ошибка: 400') {
-          setMessageText('Некорректный адрес URL.');
+          setMessageText(ERROR_CODE_BAD_REQUEST);
           setPopupOpen(true);
         }
         if (err === 'Ошибка: 404') {
@@ -235,14 +236,6 @@ function App() {
     const savedMovie = savedMovies.find(
       (item) => item.movieId === movie.id || item.movieId === movie.movieId
       )
-
-    console.log('savedMovie = ', savedMovie);
-
-    // if(savedMovie){
-    //   setMessageText(`savedMovie = `+ savedMovie.nameRU);
-    //   setPopupOpen(true);
-    // }
-
     mainApi.deleteMovie(savedMovie._id)
       .then(() => {
         const newMoviesList = savedMovies.filter((m) => {
@@ -252,7 +245,6 @@ function App() {
             return true
           }
         })
-        console.log('newMoviesList = ', newMoviesList);
         setSavedMovies(newMoviesList);
         localStorage.setItem('savedMovies', JSON.stringify(newMoviesList));
       })
@@ -262,7 +254,7 @@ function App() {
           setPopupOpen(true);
         }
         if (err === 'Ошибка: 400') {
-          setMessageText('Некорректный адрес URL.');
+          setMessageText(ERROR_CODE_BAD_REQUEST);
           setPopupOpen(true);
         }
         if (err === 'Ошибка: 404') {
@@ -325,7 +317,7 @@ function App() {
           localStorage.setItem('savedMovies', JSON.stringify(UserMoviesList));
         })
         .catch(err => {
-          setMessageText(`222 getSavedMovies: catch: ` + err);
+          setMessageText(`getSavedMovies: catch: ` + err);
           setPopupOpen(true);
         })
     }
@@ -350,7 +342,6 @@ function App() {
 
   useEffect(() => {
     const path = pathname;
-    console.log('useEffect: path = ',pathname );
 
     if (!loggedIn) {
       history.push(path);

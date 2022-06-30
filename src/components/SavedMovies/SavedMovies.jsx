@@ -8,9 +8,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function SavedMovies(props) {
     // console.log('111 SavedMovies props.savedMovies === ', props);
-    console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
-    // console.log('111 props.savedUserMovie= ', props.savedUserMovie);
-    // console.log('SavedMovies props.setFilteredMovies= ', props.setFilteredMovies);
+    // console.log('111 SavedMovies props.savedMovies === ', props.savedMovies);
 
     // Подписываемся на контекст CurrentUserContext
     const currentUser = React.useContext(CurrentUserContext);
@@ -92,7 +90,7 @@ function SavedMovies(props) {
         }
     }, [currentUser]);
 
-    //отображение карточек из локального хранилища
+    //отображение сохраненых/удаленных карточек
     useEffect(() => {
 
         if (props.savedMovies) {
@@ -108,26 +106,12 @@ function SavedMovies(props) {
                 setFilteredMovies(movies);
             }
         }
-//         if (props.savedMovies.length) {
-//             setFilteredMovies(props.savedMovies)
-
-// console.log('filteredMovies = ', filteredMovies(props.savedMovies) )
-
-//         } 
         else {
             setNothingFound(true)
         }
 
     }, [currentUser, props.savedMovies]);
 
-    // // отрисовка сохраненых/удаленных карточек
-    // useEffect(() => {
-    //     // console.log('useEffect:  props.savedMovies = ', props.savedMovies)
-    //     // console.log('222 localStorage.savedMovies = ',localStorage.savedMovies);
-    //     setFilteredMovies(props.savedMovies)
-    //     localStorage.setItem('savedMovies', JSON.stringify(props.savedMovies));
-    //     // console.log('333 localStorage.savedMovies = ',localStorage.savedMovies);
-    // }, [props.savedMovies])
 
 
     return (
