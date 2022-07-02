@@ -1,4 +1,5 @@
-export const BASE_URL = 'https://mesto.backend.annsyh.nomoredomains.work';
+import {BASE_URL} from './config';
+// export const BASE_URL = 'https://mesto.backend.annsyh.nomoredomains.work';
 
 const handleResponse = response => {
   const result = response.json();

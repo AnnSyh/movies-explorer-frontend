@@ -98,6 +98,7 @@ function App() {
           setMessageText(ERROR_409);
           setPopupOpen(true);
         } else {
+          console.log('err = ',err);
           // setMessageText(`Register: handleLogin: catch: ` + err);
           setMessageText(ERROR_TOO_MANY_REGUESTS);
           setPopupOpen(true);
@@ -179,9 +180,8 @@ function App() {
         closeAllPopups();
       })
       .catch((e) => {
-        // setMessage(e.message);
-        // console.log('message = ', message);
-        setMessageText(`handleUpdateUser: catch: ` + e + `e.message = ` + e.message);
+        // console.log('message = ', e);
+        setMessageText(`Введите другие данные ` + ERROR_409);
         setPopupOpen(true);
       }
       )
@@ -343,34 +343,35 @@ function App() {
 
   useEffect(() => {
     const path = pathname;
+    const token = localStorage.getItem('token');
 
-    if (!loggedIn) {
-      history.push(path);
-      return;
+    if(token){
+
+      mainApi.updateTokenInHeaders();
+      mainApi
+        .getUserInfo()
+        // .then(setCurrentUser)
+        .then((data) => {
+  
+          if(data){
+            setLoggedIn(true);
+            setCurrentUser(data);
+            history.push(path);
+          }
+  
+        })
+        .catch((err) => {
+          handleApiError(err);
+          setMessageText(`Необходима авторизация`);
+          setPopupOpen(true);
+        });
+    } else {
+      setLoggedIn(false);
     }
-    mainApi.updateTokenInHeaders();
-    mainApi
-      .getUserInfo()
-      // .then(setCurrentUser)
-      .then((data) => {
 
-        if(data){
-          setCurrentUser(data);
-          history.push(path);
-        }
-
-      })
-      .catch((err) => {
-        handleApiError(err);
-        setMessageText(`useEffect() getUserInfo catch: ` + err);
-        setPopupOpen(true);
-      });
-  }, [loggedIn]);
-
+  }, []);
 
   // ------------------------------
-
-
 
   return (
     <>

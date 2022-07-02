@@ -116,8 +116,8 @@ class MainApi extends Api {
 }
 
 const mainApi = new MainApi({
-    // serverUrl: MAIN_API_URL,
-    serverUrl: 'https://mesto.backend.annsyh.nomoredomains.work',
+    serverUrl: MAIN_API_URL,
+    // serverUrl: 'https://mesto.backend.annsyh.nomoredomains.work',
     // serverUrl: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json'

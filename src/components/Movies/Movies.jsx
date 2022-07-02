@@ -5,6 +5,7 @@ import Preloader from '../Preloader/Preloader';
 import CardList from '../CardList/CardList';
 import moviesApi from "../../utils/MoviesApi";
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { MOVIEDURATION } from "../../utils/config";
 
 
 
@@ -41,7 +42,7 @@ function Movies(props) {
 
     //фильтр по длительности
     function filterShortMovies(movies) {
-        return movies.filter((movie) => movie.duration <= 40);
+        return movies.filter((movie) => movie.duration <= MOVIEDURATION);
     };
 
     //поиск фильмов по ключевому слову и длительности
