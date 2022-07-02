@@ -30,8 +30,8 @@ function SearchForm(props) {
 
     //состояние инпута из локального хранилища
     useEffect(() => {
-      if (location.pathname === '/movies' && localStorage.getItem(`movieSearch`)) {
-        const searchValue = localStorage.getItem(`movieSearch`);
+      if (location.pathname === '/movies' && localStorage.getItem(`${currentUser.email} - movieSearch`)) {
+        const searchValue = localStorage.getItem(`${currentUser.email} - movieSearch`);
         values.movie = searchValue;
         // setIsValid(true);
       }

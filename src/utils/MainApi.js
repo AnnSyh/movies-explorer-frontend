@@ -41,7 +41,7 @@ class MainApi extends Api {
     }
 
     getUserInfo() {
-        // console.log(' !!! getUserInfo: fetch( ', `${this._serverUrl}/users/me`);
+        console.log(' !!! getUserInfo: fetch( ', `${this._serverUrl}/users/me`);
         return fetch(`${this._serverUrl}/users/me`, {
             method: 'GET',
             headers: this._headers
@@ -118,6 +118,7 @@ class MainApi extends Api {
 const mainApi = new MainApi({
     // serverUrl: MAIN_API_URL,
     serverUrl: 'https://mesto.backend.annsyh.nomoredomains.work',
+    // serverUrl: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json'
     }

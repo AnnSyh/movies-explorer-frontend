@@ -161,7 +161,8 @@ function App() {
 
   //разлогинивание
   function signOut() {
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
+    localStorage.clear();
     setLoggedIn(false);
     setCurrentUser({});
     history.push('/');
@@ -246,7 +247,7 @@ function App() {
           }
         })
         setSavedMovies(newMoviesList);
-        localStorage.setItem('savedMovies', JSON.stringify(newMoviesList));
+        localStorage.setItem(`${currentUser.email} - savedMovies`, JSON.stringify(newMoviesList));
       })
       .catch((err) => {
         if (err === 'Ошибка: 500') {
@@ -276,7 +277,7 @@ function App() {
       .getSavedMovies()
       .then((res) => {
         setSavedMovies(res);
-        localStorage.setItem('savedMovies', JSON.stringify(res));
+        localStorage.setItem(`${currentUser.email} - savedMovies`, JSON.stringify(res));
         console.log('localStorage.savedMovies = ', localStorage.savedMovies);
       })
       .catch((err) => {
@@ -311,10 +312,10 @@ function App() {
         .getSavedMovies()
         .then((data) => {
           // setSavedMovies(data.movies); 
-          // localStorage.setItem('savedMovies', JSON.stringify(data.movies));
+          // localStorage.setItem(`${currentUser.email} - savedMovies`, JSON.stringify(data.movies));
           const UserMoviesList = data.movies.filter(m => m.owner === currentUser._id);
           setSavedMovies(UserMoviesList);
-          localStorage.setItem('savedMovies', JSON.stringify(UserMoviesList));
+          localStorage.setItem(`${currentUser.email} - savedMovies`, JSON.stringify(UserMoviesList));
         })
         .catch(err => {
           setMessageText(`getSavedMovies: catch: ` + err);

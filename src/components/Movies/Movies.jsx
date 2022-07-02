@@ -50,14 +50,14 @@ function Movies(props) {
         moviesList.length === 0 ? setNothingFound(true) : setNothingFound(false);
         setInitialMovies(moviesList);
         setFilteredMovies(shortMoviesCheckbox ? filterShortMovies(moviesList) : moviesList);
-        localStorage.setItem('movies', JSON.stringify(moviesList));
+        localStorage.setItem(`${currentUser.email} - movies`, JSON.stringify(moviesList));
     }
 
     // сабмит формы поиска
     function handleSearchSubmit(inputValue) {
         setIsDataLoading(true);
-        localStorage.setItem('movieSearch', inputValue);
-        localStorage.setItem('shortMovies', shortMovies);
+        localStorage.setItem(`${currentUser.email} - movieSearch`, inputValue);
+        localStorage.setItem(`${currentUser.email} - shortMovies`, shortMovies);
         moviesApi
             .getAllMovies()
             .then((data) => {
@@ -86,21 +86,21 @@ function Movies(props) {
             setFilteredMovies(initialMovies);
         }
         // запомним выбранный чекбокс
-        localStorage.setItem('shortMovies', !shortMovies);
+        localStorage.setItem(`${currentUser.email} - shortMovies`, !shortMovies);
     }
 
     //-------------useEffects-----------------------------------
 
     //состояние инпута в локальном хранилище
     useEffect(() => {
-        if (localStorage.getItem('movieSearch')) {
-            setInputValue(localStorage.getItem('movieSearch'));
+        if (localStorage.getItem(`${currentUser.email} - movieSearch`)) {
+            setInputValue(localStorage.getItem(`${currentUser.email} - movieSearch`));
         }
     }, []);
 
     //состояние тумблера в локальном хранилище
     useEffect(() => {
-        if (localStorage.getItem('shortMovies') === "true") {
+        if (localStorage.getItem(`${currentUser.email} - shortMovies`) === "true") {
             setShortMovies(true);
         } else {
             setShortMovies(false);
@@ -109,13 +109,13 @@ function Movies(props) {
 
     //отображение карточек из локального хранилища
     useEffect(() => {
-        if (localStorage.getItem('movies')) {
-            const movies = JSON.parse(localStorage.getItem('movies'));
+        if (localStorage.getItem(`${currentUser.email} - movies`)) {
+            const movies = JSON.parse(localStorage.getItem(`${currentUser.email} - movies`));
 
             movies.length === 0 ? setNothingFound(true) : setNothingFound(false)
             setInitialMovies(movies);
 
-            if (localStorage.getItem('shortMovies') === "true") {
+            if (localStorage.getItem(`${currentUser.email} - shortMovies`) === "true") {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
                 setFilteredMovies(movies);

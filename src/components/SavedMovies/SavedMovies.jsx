@@ -40,15 +40,15 @@ function SavedMovies(props) {
 
     //поиск среди сохраненных фильмов
     function handleSearchSubmit(inputValue) {
-        localStorage.setItem('savedMoviesSearch', inputValue);
-        const movies = JSON.parse(localStorage.getItem('savedMovies'));
+        localStorage.setItem(`${currentUser.email} - savedMoviesSearch`, inputValue);
+        const movies = JSON.parse(localStorage.getItem(`${currentUser.email} - savedMovies`));
 
         if (filterMovies(movies, inputValue, shortMovies).length === 0) {
             setNothingFound(true)
         } else {
             setNothingFound(false)
             setFilteredMovies(filterMovies(movies, inputValue, shortMovies))
-            localStorage.setItem('savedMovies', JSON.stringify(movies));
+            localStorage.setItem(`${currentUser.email} - savedMovies`, JSON.stringify(movies));
         }
     }
 
@@ -69,21 +69,21 @@ function SavedMovies(props) {
             setFilteredMovies(initialMovies);
         }
         // запомним выбранный чекбокс
-        localStorage.setItem('shortMovies', !shortMovies);
+        localStorage.setItem(`${currentUser.email} - shortMovies`, !shortMovies);
     }
 
     //-------------useEffects-----------------------------------
 
     //состояние инпута в локальном хранилище
     useEffect(() => {
-        if (localStorage.getItem('movieSearch')) {
-            setInputValue(localStorage.getItem('movieSearch'));
+        if (localStorage.getItem(`${currentUser.email} - movieSearch`)) {
+            setInputValue(localStorage.getItem(`${currentUser.email} - movieSearch`));
         }
     }, []);
 
     //состояние чекбокса в локальном хранилище
     useEffect(() => {
-        if (localStorage.getItem('shortMovies') === 'true') {
+        if (localStorage.getItem(`${currentUser.email} - shortMovies`) === 'true') {
             setShortMovies(true);
         } else {
             setShortMovies(false);
@@ -100,7 +100,7 @@ function SavedMovies(props) {
             setInitialMovies(movies);
 
 
-            if (localStorage.getItem('shortMovies') === 'true') {
+            if (localStorage.getItem(`${currentUser.email} - shortMovies`) === 'true') {
                 setFilteredMovies(filterShortMovies(movies));
             } else {
                 setFilteredMovies(movies);
