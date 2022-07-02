@@ -343,33 +343,26 @@ function App() {
 
   useEffect(() => {
     const path = pathname;
-    const token = localStorage.getItem('token');
 
-    if(token){
+    mainApi.updateTokenInHeaders();
+    mainApi
+      .getUserInfo()
+      // .then(setCurrentUser)
+      .then((data) => {
 
-      mainApi.updateTokenInHeaders();
-      mainApi
-        .getUserInfo()
-        // .then(setCurrentUser)
-        .then((data) => {
-  
-          if(data){
-            setLoggedIn(true);
-            setCurrentUser(data);
-            history.push(path);
-          }
-  
-        })
-        .catch((err) => {
-          handleApiError(err);
-          setMessageText(`Необходима авторизация`);
-          setPopupOpen(true);
-        });
-    } else {
-      setLoggedIn(false);
-    }
+        if(data){
+          setLoggedIn(true);
+          setCurrentUser(data);
+          history.push(path);
+        }
 
-  }, []);
+      })
+      .catch((err) => {
+        handleApiError(err);
+        // setMessageText(`useEffect() getUserInfo catch: ` + err);
+        // setPopupOpen(true);
+      });
+  }, [loggedIn]);
 
   // ------------------------------
 

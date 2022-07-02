@@ -7,7 +7,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useFormWithValidation } from '../../hooks/useForm';
 
 function Profile(props) {
-    // console.log('Profile: props = ', props)
+    console.log('Profile: props = ', props)
     const currentUser = React.useContext(CurrentUserContext); // Подписываемся на контекст CurrentUserContext
     // console.log('Profile: currentUser = ', currentUser)
     const [isEditModeOn, setIsEditModeOn] = useState(false);
