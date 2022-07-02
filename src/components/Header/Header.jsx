@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import logoSrc from '../../images/logo.svg';
 import burgerMenuSrc from '../../images/burger-menu.svg';
@@ -7,26 +7,37 @@ import './header.css';
 import Navbar from '../NavBar/NavBar';
 
 function Header(props) {
-  // console.log('Headers: props = ', props);
-  // console.log('Headers: props.isLoggedIn = ', props.isLoggedIn);
+  // console.log('Header: props.pathname = ', props.pathname);
+
   const [isBurgerOpened, setIsBurgerOpened] = useState(false);
 
   function handleBurgerIconClick() {
-    console.log('handleBurgerIconClick');
+    setIsBurgerOpened(!isBurgerOpened);
+  }
+
+  //это должно работать для десктопа без серого закрывающего фона
+  //закрываем меню при переходе настр (т.е. при клике по пункту меню)
+  function linkClick() {
     setIsBurgerOpened(!isBurgerOpened);
   }
 
   return (
     <>
       <div id='top'></div>
-      <header className='header'>
+      <header
+        className={
+          props.pathname === '/signup' || props.pathname === '/signin'
+            ? 'header header__hidden'
+            : 'header'
+        }
+      >
         <div className='header__container'>
           <div className='header__mobile'>
             <Link to='/' className='header__mobile-logo-link'>
               <img className='logo header__container__logo' src={logoSrc} alt='логотип' />
             </Link>
             <div className={`hamburger ${isBurgerOpened ? 'open' : 'closed'}
-                            ${props.isLoggedIn ? 'LoggedIn' : 'noLoggedIn'} `}
+                            ${props.loggedIn ? 'LoggedIn' : 'noLoggedIn'} `}
               onClick={handleBurgerIconClick}
             >
               <img className='hamburger__img' src={` ${isBurgerOpened ? burgerMenuCloseSrc : burgerMenuSrc} `} alt='бургер' />
@@ -36,8 +47,9 @@ function Header(props) {
             ? 'header__overlay-visible'
             : 'header__overlay-unvisible'}></div>
           <Navbar
-            loggedIn={props.isLoggedIn}
+            loggedIn={props.loggedIn}
             isBurgerOpened={isBurgerOpened}
+            linkClick={linkClick}
           />
         </div>
       </header>

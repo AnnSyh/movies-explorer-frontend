@@ -34,7 +34,9 @@
 
 .search__button {
   color: #ffffff;
-  background: #FF6838;
+  /* background: #FF6838; */
+  background: #ccc;
+  
   border-radius: 3px;
   font-weight: 500;
   font-size: 14px;
@@ -45,10 +47,8 @@
   width: 110px;
   border-radius: 5px;
 }
-
-.search__button:hover {
-  cursor: pointer;
-  opacity: 0.8;
+.search__button-valid {
+   background: #FF6838;
 }
 
 .search__button_disabled {
@@ -154,6 +154,23 @@
   width: 20px;
   height: 20px;
 }
+
+.null.checkbox__slider_green:before,
+.true.checkbox__slider_green:before,
 .checkbox__slider_green:before {
   background-color: #2BE080;
 }
+
+.false.checkbox__slider_green:before,
+.checkbox__slider_green:before {
+  background-color: #ffffff;
+}
+
+.checkbox__slider_card:hover::before {
+  background-color: #2BE080;
+}
+
+/* .checkbox__slider_green:hover::before {
+  background-color: #FFFFFF;
+} */
+

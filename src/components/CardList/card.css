@@ -1,0 +1,152 @@
+.cards {
+  padding: 0 20px;
+}
+
+.cards__img {
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.cards__item {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  background-color: #fff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.05);
+}
+
+.cards__list {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.cards__pic {
+  width: 100%;
+  max-height: 439px;
+  position: relative;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.cards__pic:hover {
+  opacity: 0.8;
+}
+
+.cards__title {
+  font-size: 13px;
+  line-height: 16px;
+  color: #000;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  width: calc(100% - 30px);
+}
+.cards__text {
+  padding: 11px 12px 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+.cards__tex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.cards__check {
+  width: 32px;
+  height: 32px;
+}
+
+.cards__trash {
+  width: 16px;
+  height: 16px;
+}
+.cards__trash {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-image: url(../../images/Cros.svg);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+  background-color: transparent;
+  border: none;
+}
+
+.cards__time {
+  color: #A0A0A0;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
+}
+
+.btn__else {
+  cursor: pointer;
+  width: 240px;
+  margin: 79px auto 99px auto;
+  display: block;
+  font-size: 12px;
+  line-height: 14px;
+  height: 36px;
+  border: none;
+  background: #F9F9F9;
+  color:#000;
+  font-weight: 500;
+}
+
+@media screen and (min-width:480px) {
+  .text-overflow {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+  }
+
+  .btn__else {
+    width: 320px;
+  }
+
+  .cards__list {
+    grid-template-columns: repeat(2, calc(100% / 2 - 10px));
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .cards__pic {
+    width: 100%;
+    max-height: 151px;
+    height: 100%;
+  }
+}
+
+@media screen and (min-width:768px) {
+  .cards__img {
+    min-height: 151px;
+  }
+
+  .cards__list {
+    gap: 24px 17px;
+    grid-template-columns: repeat(3, calc(100% / 3 - 11px));
+  }
+}
+
+@media screen and (min-width:1200px) {
+  .cards__img {
+    min-height: 151px;
+  }
+
+  .cards__list {
+    gap: 32px 20px;
+    grid-template-columns: repeat(4, calc(100% / 4 - 16px));
+  }
+}

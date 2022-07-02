@@ -1,37 +1,52 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+import {BASE_URL} from './config';
+// export const BASE_URL = 'https://mesto.backend.annsyh.nomoredomains.work';
 
 const handleResponse = response => {
-if (response.ok) { 
-  return response.json();
-}
+  const result = response.json();
+  const status = response.status;
 
-return Promise.reject(`Ошибка ${response.status}`);
+  console.log('result = ',result)
+  console.log('status = ',status)
+
+if (response.ok) { 
+  return result;
+}
+return Promise.reject(response.status);
 };
 
-//Функция регистрация пользователя
-export const register = (email, password) => {
 
+  // // проверка статуса запроса
+  // async _requestResult(res) {
+  //   const result = await res.json();
+  //   return res.ok ? result : Promise.reject(result.message);
+  // }
+
+
+
+//Функция регистрация пользователя
+export const register = (values) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    body: JSON.stringify(values)
   })
-  .then(handleResponse);
+  .then(res => handleResponse(res));
+  // .then(res => res.json())
+  // .then(handleResponse);
 };
 
 //Функция авторизация пользователя
-export const authorize = (email, password) => {
-
+export const authorize = (values) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    body: JSON.stringify(values)
   })
   .then(handleResponse);
 };

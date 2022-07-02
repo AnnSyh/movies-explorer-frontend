@@ -10,9 +10,7 @@ function ArrowTop() {
   }
 
   // arrowTop.addEventListener('click', top);
-
   // window.addEventListener('scroll', function(evt) {
-
   //   if (window.scrollY > 200){
   //     arrowTop.classList.add('arrow-top__visible');
   //   } else {

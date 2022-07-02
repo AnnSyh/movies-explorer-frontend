@@ -16,9 +16,9 @@ function InfoTooltip(props) {
             <img className="popup__img popup__img_icon"
                     src={checkedIcon}
                     alt='checked' />
-            <h2 className="page-title popup__page-title text-center">
+            <p className="page-title popup__page-title text-center">
               {props.message}
-              </h2>
+              </p>
           </div>
       </PopupWithOutForm>
 

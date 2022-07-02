@@ -63,9 +63,17 @@
   border: none;
 }
 
-.profile__input:focus, .profile__input:hover {
+.profile__input:focus, 
+.profile__input:hover {
   outline: 2px solid #FF6838;
 }
+
+.profile__form_disabled  .profile__input:focus, 
+.profile__form_disabled  .profile__input:hover {
+  outline: 2px solid transparent;
+}
+
+
 
 .profile__input-title {
   width: 50px;
@@ -97,7 +105,8 @@
 
 .profile__btn {
   color: #ffffff;
-  background: #FF6838;
+  /* background: #FF6838; */
+  background: #ccc;
   border-radius: 3px;
   height: 45px;
   font-weight: 500;
@@ -106,6 +115,13 @@
   text-align: center;
   border: none;
   width: 100%;
+}
+.profile__btn-valid {
+   background: #FF6838;
+}
+
+.profile__btn-disabled {
+  background: #ffffff;
 }
 
 .profile__link {
@@ -120,6 +136,13 @@
 
 .profile__link_exit {
   color: #EE3465;
+}
+
+.profile__message {
+  color: #EE3465;
+}
+.profile__message_disabled {
+  display: none;
 }
 
 @media screen and (min-width: 456px) {
